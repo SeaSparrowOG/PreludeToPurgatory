@@ -3,4 +3,5 @@ set(sources ${sources}
 	src/events.cpp
 	src/hooks.cpp
 	src/main.cpp
+	src/papyrus.cpp
 )

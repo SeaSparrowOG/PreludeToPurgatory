@@ -3,6 +3,7 @@
 #include "defaultObjects.h"
 #include "events.h"
 #include "hooks.h"
+#include "papyrus.h"
 
 void SetupLog() {
     auto logsFolder = SKSE::log::log_directory();
@@ -28,6 +29,7 @@ void SetupLog() {
 
 void MessageHandler(SKSE::MessagingInterface::Message* a_message) {
     if (a_message->type == SKSE::MessagingInterface::kDataLoaded) {
+        SKSE::GetPapyrusInterface()->Register(Papyrus::RegisterFunctions);
         Events::SoulTrapListener::GetSingleton()->RegisterListener();
         Events::ActorDeathListener::GetSingleton()->RegisterListener();
 

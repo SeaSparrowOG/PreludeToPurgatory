@@ -19,7 +19,7 @@ namespace Events {
 			}
 
 			float fMultiplier = 0.0f;
-			switch (trapper->GetSoulSize()) {
+			switch (trapped->GetSoulSize()) {
 			case RE::SOUL_LEVEL::kPetty:
 			case RE::SOUL_LEVEL::kLesser:
 				fMultiplier = 0.5;
@@ -108,7 +108,7 @@ namespace Events {
 					deadActorLevel = 50;
 				}
 				float fExperience = deadActorLevel / 5.0f + 3.0f;
-				fExperience *= 0.05;
+				fExperience *= 0.05f;
 				auto callback = RE::BSTSmartPointer<RE::BSScript::IStackCallbackFunctor>();
 				auto args = RE::MakeFunctionArguments((float)fExperience); //WHY WON'T YOU COMPILE WITHOUT THE (float)?!?!?!
 				const RE::BSFixedString functionName = "CalculateExperience"sv;
