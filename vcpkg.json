@@ -1,0 +1,21 @@
+{
+  "name": "prelude-to-purgatory",
+  "version-string": "2.0.0",
+  "description": "DLL Helper for prelude to purgatory, helps certain perks work.",
+  "homepage": "",
+  "license": "MIT",
+  "dependencies": [
+    "rsm-binary-io",
+    "spdlog",
+    "clib-util",
+    "jsoncpp",
+    "xbyak"
+  ],
+  "overrides": [
+    {
+      "name": "fmt",
+      "version": "9.1.0"
+    }
+  ],
+  "builtin-baseline": "b7dba7f9aad09a56900f21cd78cfda1258e54e38"
+}
