@@ -7,10 +7,16 @@
 namespace Hooks {
 	void Install()
 	{
-		SKSE::AllocTrampoline(42);
-		ActiveEffectApply::Install();
+		SKSE::AllocTrampoline(28);
 		HandleSpellCollisions::Install();
-		HandleHealthDamage::Install();
+		CombatHit::Install();
+	}
+
+	void CombatHit::Install()
+	{
+		auto& trampoline = SKSE::GetTrampoline();
+		REL::Relocation<std::uintptr_t> target{ REL::ID(38627), 0x4A8 };
+		_originalCall = trampoline.write_call<5>(target.address(), &Hit);
 	}
 
 	void HandleSpellCollisions::Install()
@@ -71,61 +77,47 @@ namespace Hooks {
 		return _originalCall(a_this, a_target, arHitLocation, arHitNormal, aeCollisionLayer, auiMaterial, a7);
 	}
 
-	void HandleHealthDamage::Install()
+	void CombatHit::Hit(RE::Actor* a_this, RE::HitData* a_hitData)
 	{
-		auto& trampoline = SKSE::GetTrampoline();
-		REL::Relocation<std::uintptr_t> target{ REL::ID(38627), 0x4A8 };
-		_originalCall = trampoline.write_call<5>(target.address(), &Damage);
-	}
-
-	void HandleHealthDamage::Damage(RE::Actor* a_this, RE::HitData* a_hitData)
-	{
-		auto* redirectPerk = DefaultObjects::ModObject<RE::BGSPerk>("PTP_SpiritCaller_WailsOfTheDamned"sv);
+		auto* redirectPerk = DefaultObjects::ModObject<RE::BGSPerk>("PTP_Necromancer_PRK_OneBody"sv);
 		auto* lichRace = DefaultObjects::ModObject<RE::TESRace>("NecroLichRace"sv);
 		auto* silverPerk = DefaultObjects::ModObject<RE::BGSKeyword>("WeapMaterialSilver");
 		if (!redirectPerk || !lichRace || !silverPerk) {
+			_loggerError("WARNING! Could not resolve default objects for Combat Hit");
 			return _originalCall(a_this, a_hitData);
 		}
 		if (!a_this->HasPerk(redirectPerk) || a_this->GetRace() != lichRace) {
+			_loggerDebug("Requirements not met");
 			return _originalCall(a_this, a_hitData);
 		}
 		if (a_hitData->weapon && a_hitData->weapon->HasKeyword(silverPerk)) {
+			_loggerDebug("Weapon is silver");
 			return _originalCall(a_this, a_hitData);
 		}
 
 		if (const auto middleHigh = a_this->GetMiddleHighProcess()) {
 			auto it = middleHigh->commandedActors.begin();
 			auto end = middleHigh->commandedActors.end();
-			float remaining = a_hitData->physicalDamage;
+			float remaining = a_hitData->totalDamage;
 
 			for (; it != end && remaining > 0.0f; ++it) {
 				const auto commandedActor = (*it).commandedActor.get().get();
-				if (commandedActor->CalculateCachedOwnerIsUndead()) {
+				if (commandedActor->actorState1.lifeState == RE::ACTOR_LIFE_STATE::kReanimate) {
+					_loggerDebug("Valid minion");
 					auto health = commandedActor->GetActorValue(RE::ActorValue::kHealth);
 					if (health >= remaining) {
 						remaining -= health;
 						_originalCall(commandedActor, a_hitData);
-						a_hitData->physicalDamage = 0.0f;
+						a_hitData->totalDamage = 0.0f;
 					}
 					else {
 						remaining -= health;
 						_originalCall(commandedActor, a_hitData);
-						a_hitData->physicalDamage = remaining;
+						a_hitData->totalDamage = remaining;
 					}
 				}
 			}
 		}
 		_originalCall(a_this, a_hitData);
-	}
-
-	void ActiveEffectApply::Install()
-	{
-		REL::Relocation<std::uintptr_t> vtbl{ RE::ReanimateEffect::VTABLE[0]};
-		_originalCall = vtbl.write_vfunc(0x4, OnAdd);
-	}
-
-	void ActiveEffectApply::OnAdd(RE::ReanimateEffect* a_this, float a_delta)
-	{
-		_originalCall(a_this, a_delta);
 	}
 }

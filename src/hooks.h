@@ -12,22 +12,16 @@ namespace Hooks {
 		static inline REL::Relocation<decltype(&HandleCollision)> _originalCall;
 	};
 
-	class HandleHealthDamage {
+	class CombatHit {
 	public:
 		static void Install();
+
 	private:
-		static void Damage(RE::Actor* a_this, RE::HitData* a_hitData);
+		static bool HandleDamageDistribution(RE::Actor* a_this, RE::HitData* a_hitData);
 
-		static inline REL::Relocation<decltype(&Damage)> _originalCall;
-	};
+		static void Hit(RE::Actor* a_this, RE::HitData* a_hitData);
 
-	class ActiveEffectApply {
-	public:
-		static void Install();
-	private:
-		static void OnAdd(RE::ReanimateEffect* a_this, float a_delta);
-
-		static inline REL::Relocation<decltype(&OnAdd)> _originalCall;
+		static inline REL::Relocation<decltype(&Hit)> _originalCall;
 	};
 
 	void Install();
