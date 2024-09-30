@@ -77,22 +77,57 @@ namespace Hooks {
 		return _originalCall(a_this, a_target, arHitLocation, arHitNormal, aeCollisionLayer, auiMaterial, a7);
 	}
 
-	void CombatHit::Hit(RE::Actor* a_this, RE::HitData* a_hitData)
+	void CombatHit::HandleJoinTheMarch(RE::Actor* a_this, RE::HitData* a_hitData)
 	{
+		_loggerInfo("Join the March:");
+		auto* lichRace = DefaultObjects::ModObject<RE::TESRace>("NecroLichRace"sv);
+		auto* marchPerk = DefaultObjects::ModObject<RE::BGSPerk>("PTP_Necromancer_PRK_JoinTheMarch"sv);
+		auto* marchSpell = DefaultObjects::ModObject<RE::SpellItem>("PTP_Necromancer_SPL_JoinTheMarchListener"sv);
+		if (!lichRace || !marchPerk || !marchSpell) {
+			_loggerError("  Handle Join the March Error: Failed to resolve default objects.");
+			_loggerError("    March spell: {}", marchSpell ? _debugEDID(marchSpell) : "NULL");
+			_loggerError("    March perk: {}", marchPerk ? _debugEDID(marchPerk) : "NULL");
+			_loggerError("    Lich race: {}", lichRace ? _debugEDID(lichRace) : "NULL");
+			return;
+		}
+
+		auto* zombie = a_hitData->aggressor.get().get();
+		auto* commandingActor = zombie ? zombie->GetCommandingActor().get() : nullptr;
+		if (!commandingActor) {
+			_loggerDebug("  {} is not a commanded actor", zombie ? zombie->GetName() : "NULL");
+			return;
+		}
+		if (!commandingActor->HasPerk(marchPerk) || commandingActor->GetRace() != lichRace) {
+			_loggerDebug("  {} does not fit the criterial.", commandingActor->GetName());
+			return;
+		}
+
+		auto* zombieMC = zombie->GetMagicCaster(RE::MagicSystem::CastingSource::kInstant);
+		if (!zombieMC || zombie->actorState1.lifeState != RE::ACTOR_LIFE_STATE::kReanimate) {
+			_loggerDebug("  {} is not a valid zombie.", zombie->GetName());
+		}
+
+		_loggerDebug("  Faux onhit");
+		zombieMC->CastSpellImmediate(marchSpell, false, a_this, 1.0f, false, 0.0f, zombie);
+	}
+
+	void CombatHit::HandleDamageDistribution(RE::Actor* a_this, RE::HitData* a_hitData)
+	{
+		_loggerInfo("One Mind:");
 		auto* redirectPerk = DefaultObjects::ModObject<RE::BGSPerk>("PTP_Necromancer_PRK_OneBody"sv);
 		auto* lichRace = DefaultObjects::ModObject<RE::TESRace>("NecroLichRace"sv);
 		auto* silverPerk = DefaultObjects::ModObject<RE::BGSKeyword>("WeapMaterialSilver");
 		if (!redirectPerk || !lichRace || !silverPerk) {
 			_loggerError("WARNING! Could not resolve default objects for Combat Hit");
-			return _originalCall(a_this, a_hitData);
+			return;
 		}
 		if (!a_this->HasPerk(redirectPerk) || a_this->GetRace() != lichRace) {
-			_loggerDebug("Requirements not met");
-			return _originalCall(a_this, a_hitData);
+			_loggerDebug("  Requirements not met");
+			return;
 		}
 		if (a_hitData->weapon && a_hitData->weapon->HasKeyword(silverPerk)) {
-			_loggerDebug("Weapon is silver");
-			return _originalCall(a_this, a_hitData);
+			_loggerDebug("  Weapon is silver");
+			return;
 		}
 
 		if (const auto middleHigh = a_this->GetMiddleHighProcess()) {
@@ -103,7 +138,7 @@ namespace Hooks {
 			for (; it != end && remaining > 0.0f; ++it) {
 				const auto commandedActor = (*it).commandedActor.get().get();
 				if (commandedActor->actorState1.lifeState == RE::ACTOR_LIFE_STATE::kReanimate) {
-					_loggerDebug("Valid minion");
+					_loggerDebug("  Valid minion");
 					auto health = commandedActor->GetActorValue(RE::ActorValue::kHealth);
 					if (health >= remaining) {
 						remaining -= health;
@@ -118,6 +153,12 @@ namespace Hooks {
 				}
 			}
 		}
+	}
+
+	void CombatHit::Hit(RE::Actor* a_this, RE::HitData* a_hitData)
+	{
+		HandleDamageDistribution(a_this, a_hitData);
 		_originalCall(a_this, a_hitData);
+		HandleJoinTheMarch(a_this, a_hitData);
 	}
 }
