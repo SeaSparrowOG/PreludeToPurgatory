@@ -7,7 +7,8 @@
 namespace Hooks {
 	void Install()
 	{
-		SKSE::AllocTrampoline(28);
+		SKSE::AllocTrampoline(42);
+		ActiveEffectApply::Install();
 		HandleSpellCollisions::Install();
 		HandleHealthDamage::Install();
 	}
@@ -115,5 +116,16 @@ namespace Hooks {
 			}
 		}
 		_originalCall(a_this, a_hitData);
+	}
+
+	void ActiveEffectApply::Install()
+	{
+		REL::Relocation<std::uintptr_t> vtbl{ RE::ReanimateEffect::VTABLE[0]};
+		_originalCall = vtbl.write_vfunc(0x4, OnAdd);
+	}
+
+	void ActiveEffectApply::OnAdd(RE::ReanimateEffect* a_this, float a_delta)
+	{
+		_originalCall(a_this, a_delta);
 	}
 }

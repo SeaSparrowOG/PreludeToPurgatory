@@ -21,5 +21,14 @@ namespace Hooks {
 		static inline REL::Relocation<decltype(&Damage)> _originalCall;
 	};
 
+	class ActiveEffectApply {
+	public:
+		static void Install();
+	private:
+		static void OnAdd(RE::ReanimateEffect* a_this, float a_delta);
+
+		static inline REL::Relocation<decltype(&OnAdd)> _originalCall;
+	};
+
 	void Install();
 }
