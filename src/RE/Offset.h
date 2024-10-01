@@ -32,12 +32,4 @@ namespace RE
 			return func(a_origin, a_target, a_speed, a_gravity, a_location);
 		}
 	};
-
-	struct TESQuestInitEvent
-	{
-	public:
-		// members
-		RE::FormID formID;  // 0
-	};
-	static_assert(sizeof(TESQuestInitEvent) == 0x4);
 }
