@@ -141,18 +141,32 @@ namespace Events {
 		auto* eventAggressor = eventReference ? eventReference->As<RE::Actor>() : nullptr;
 		auto* hitReference = a_event->target.get();
 		auto* eventVictim = hitReference ? hitReference->As<RE::Actor>() : nullptr;
-		auto* eventProjectile = RE::TESForm::LookupByID(a_event->projectile) ? RE::TESForm::LookupByID(a_event->projectile)->As<RE::Projectile>() : nullptr;
-		auto* eventSpell = eventProjectile ? eventProjectile->spell : nullptr;
+		auto* eventSpell = RE::TESForm::LookupByID(a_event->source) ? RE::TESForm::LookupByID(a_event->source)->As<RE::SpellItem>() : nullptr;
 
 		if (!eventSpell || !eventVictim || !eventAggressor) {
 			_loggerDebug("  No suitable spell, victim, or aggressor");
 			return EventResult::kContinue;
 		}
+		
+		bool isFrostSpell = false;
+		for (auto it = eventSpell->effects.begin(); it != eventSpell->effects.end() && !isFrostSpell; ++it) {
+			auto* baseEffect = (*it)->baseEffect;
+			if (!baseEffect) continue;
+
+			if (baseEffect->HasKeywordString("MagicDamageFrost"sv)) {
+				isFrostSpell = true;
+			}
+		}
+		if (!isFrostSpell) {
+			_loggerDebug("  Spell is not a frost spell");
+			return EventResult::kContinue;
+		}
+
 		if (!eventVictim->IsCommandedActor() || eventVictim->actorState1.lifeState != RE::ACTOR_LIFE_STATE::kReanimate) {
 			_loggerDebug("  Victim {} is not a commanded zombie", eventVictim->GetName());
 			return EventResult::kContinue;
 		}
-		if (eventAggressor->GetRace() != lichRace || eventAggressor->HasPerk(frozenCadaverPerk) || eventAggressor != eventVictim->GetCommandingActor().get()) {
+		if (eventAggressor->GetRace() != lichRace || !eventAggressor->HasPerk(frozenCadaverPerk) || eventAggressor != eventVictim->GetCommandingActor().get()) {
 			_loggerDebug("  {} does not fulfill the criteria", eventAggressor->GetName());
 			return EventResult::kContinue;
 		}
