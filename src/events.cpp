@@ -147,7 +147,11 @@ namespace Events {
 			_loggerDebug("  No suitable spell, victim, or aggressor");
 			return EventResult::kContinue;
 		}
-		
+		if (eventVictim->HasSpell(frozenCadaverProc)) {
+			_loggerDebug("  {} already has the proc spell.", eventVictim->GetName());
+			return EventResult::kContinue;
+		}
+
 		bool isFrostSpell = false;
 		for (auto it = eventSpell->effects.begin(); it != eventSpell->effects.end() && !isFrostSpell; ++it) {
 			auto* baseEffect = (*it)->baseEffect;
