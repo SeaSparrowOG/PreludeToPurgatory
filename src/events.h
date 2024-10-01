@@ -18,4 +18,10 @@ namespace Events {
 	private:
 		EventResult ProcessEvent(const RE::TESDeathEvent* a_event, RE::BSTEventSource<RE::TESDeathEvent>*) override;
 	};
+
+	class HitEventListener :
+		public Utils::EventClass<RE::TESHitEvent, ActorDeathListener> {
+	private:
+		EventResult ProcessEvent(const RE::TESHitEvent* a_event, RE::BSTEventSource<RE::TESHitEvent>*) override;
+	};
 }

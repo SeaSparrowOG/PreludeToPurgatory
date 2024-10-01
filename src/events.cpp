@@ -120,4 +120,47 @@ namespace Events {
 		}
 		return EventResult::kContinue;
 	}
+
+	EventResult HitEventListener::ProcessEvent(const RE::TESHitEvent* a_event, RE::BSTEventSource<RE::TESHitEvent>*)
+	{
+		_loggerDebug("Hit event");
+		if (!a_event) return EventResult::kContinue;
+
+		auto* frozenCadaverPerk = DefaultObjects::ModObject<RE::BGSPerk>("PTP_Necromancer_PRK_FrozenCadavers"sv);
+		auto* frozenCadaverProc = DefaultObjects::ModObject<RE::SpellItem>("PTP_Necromancer_SPL_FrozenCadaverIceHIt"sv);
+		auto* lichRace = DefaultObjects::ModObject<RE::TESRace>("NecroLichRace"sv);
+		if (!lichRace || !frozenCadaverPerk || !frozenCadaverProc) {
+			_loggerError("Could not resolve default objects for Hit Event.");
+			_loggerError("  >Lich Race: {}", lichRace ? _debugEDID(lichRace) : "NULL");
+			_loggerError("  >Cadaver Perk: {}", frozenCadaverPerk ? _debugEDID(frozenCadaverPerk) : "NULL");
+			_loggerError("  >Cadaver Proc: {}", frozenCadaverProc ? _debugEDID(frozenCadaverProc) : "NULL");
+			return EventResult::kContinue;
+		}
+
+		auto* eventReference = a_event->cause.get();
+		auto* eventAggressor = eventReference ? eventReference->As<RE::Actor>() : nullptr;
+		auto* hitReference = a_event->target.get();
+		auto* eventVictim = hitReference ? hitReference->As<RE::Actor>() : nullptr;
+		auto* eventProjectile = RE::TESForm::LookupByID(a_event->projectile) ? RE::TESForm::LookupByID(a_event->projectile)->As<RE::Projectile>() : nullptr;
+		auto* eventSpell = eventProjectile ? eventProjectile->spell : nullptr;
+
+		if (!eventSpell || !eventVictim || !eventAggressor) {
+			_loggerDebug("  No suitable spell, victim, or aggressor");
+			return EventResult::kContinue;
+		}
+		if (!eventVictim->IsCommandedActor() || eventVictim->actorState1.lifeState != RE::ACTOR_LIFE_STATE::kReanimate) {
+			_loggerDebug("  Victim {} is not a commanded zombie", eventVictim->GetName());
+			return EventResult::kContinue;
+		}
+		if (eventAggressor->GetRace() != lichRace || eventAggressor->HasPerk(frozenCadaverPerk) || eventAggressor != eventVictim->GetCommandingActor().get()) {
+			_loggerDebug("  {} does not fulfill the criteria", eventAggressor->GetName());
+			return EventResult::kContinue;
+		}
+
+		auto* zombieMC = eventVictim->GetMagicCaster(RE::MagicSystem::CastingSource::kInstant);
+		if (!zombieMC) return EventResult::kContinue;
+
+		zombieMC->CastSpellImmediate(frozenCadaverProc, false, eventVictim, 1.0f, false, 0.0f, eventVictim);
+		return EventResult::kContinue;
+	}
 }

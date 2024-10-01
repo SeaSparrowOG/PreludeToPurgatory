@@ -32,6 +32,7 @@ void MessageHandler(SKSE::MessagingInterface::Message* a_message) {
         SKSE::GetPapyrusInterface()->Register(Papyrus::RegisterFunctions);
         Events::SoulTrapListener::GetSingleton()->RegisterListener();
         Events::ActorDeathListener::GetSingleton()->RegisterListener();
+        Events::HitEventListener::GetSingleton()->RegisterListener();
 
         if (!DefaultObjects::Storage::GetSingleton()->Initialize()) {
             _loggerError("Failed to get the default objects. Aborting load...");
