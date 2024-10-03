@@ -79,7 +79,7 @@ namespace Hooks {
 
 	void CombatHit::HandleJoinTheMarch(RE::Actor* a_this, RE::HitData* a_hitData)
 	{
-		_loggerInfo("Join the March:");
+		_loggerDebug("Join the March:");
 		auto* lichRace = DefaultObjects::ModObject<RE::TESRace>("NecroLichRace"sv);
 		auto* marchPerk = DefaultObjects::ModObject<RE::BGSPerk>("PTP_Necromancer_PRK_JoinTheMarch"sv);
 		auto* marchSpell = DefaultObjects::ModObject<RE::SpellItem>("PTP_Necromancer_SPL_JoinTheMarchListener"sv);
@@ -174,7 +174,7 @@ namespace Hooks {
 
 	void CombatHit::HandleDamageDistribution(RE::Actor* a_this, RE::HitData* a_hitData)
 	{
-		_loggerInfo("One Mind:");
+		_loggerDebug("One Mind:");
 		auto* redirectPerk = DefaultObjects::ModObject<RE::BGSPerk>("PTP_Necromancer_PRK_OneBody"sv);
 		auto* lichRace = DefaultObjects::ModObject<RE::TESRace>("NecroLichRace"sv);
 		auto* silverPerk = DefaultObjects::ModObject<RE::BGSKeyword>("WeapMaterialSilver");
