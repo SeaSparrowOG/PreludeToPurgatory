@@ -10,6 +10,12 @@ namespace Events {
 
 	EventResult SoulTrapListener::ProcessEvent(const RE::SoulsTrapped::Event* a_event, RE::BSTEventSource<RE::SoulsTrapped::Event>*)
 	{
+		auto* lichRace = DefaultObjects::ModObject<RE::TESRace>("NecroLichRace"sv);
+		if (!lichRace) {
+			_loggerError("WARNING! Could not resolve Lich Race in ActorDeathListener.");
+			return EventResult::kContinue;
+		}
+
 		if (a_event && a_event->target && a_event->trapper) {
 			_loggerDebug("Soul trap: {} trapped {}", a_event->target->GetName(), a_event->trapper->GetName());
 			auto* trapper = a_event->trapper;
@@ -17,6 +23,7 @@ namespace Events {
 			if (trapper != RE::PlayerCharacter::GetSingleton()) {
 				return EventResult::kContinue;
 			}
+			if (trapper->GetRace() != lichRace) return EventResult::kContinue;
 
 			float fMultiplier = 0.0f;
 			switch (trapped->GetSoulSize()) {
@@ -70,6 +77,12 @@ namespace Events {
 
 	EventResult ActorDeathListener::ProcessEvent(const RE::TESDeathEvent* a_event, RE::BSTEventSource<RE::TESDeathEvent>*)
 	{
+		auto* lichRace = DefaultObjects::ModObject<RE::TESRace>("NecroLichRace"sv);
+		if (!lichRace) {
+			_loggerError("WARNING! Could not resolve Lich Race in ActorDeathListener.");
+			return EventResult::kContinue;
+		}
+
 		if (a_event && a_event->actorDying.get() && a_event->actorKiller.get()) {
 			_loggerDebug("Actor death: {} killed by {}", a_event->actorDying.get()->GetName(), a_event->actorKiller.get()->GetName());
 			auto* dyingRef = a_event->actorDying.get();
@@ -77,6 +90,7 @@ namespace Events {
 			bool isActorDead = dyingRef->IsDead();
 			if (!isActorDead || !dyingRef || !dyingActor) return EventResult::kContinue;
 			if (dyingActor->IsCommandedActor()) return EventResult::kContinue;
+			if (RE::PlayerCharacter::GetSingleton()->GetRace() != lichRace) return EventResult::kContinue;
 
 			auto distanceFromPlayer = RE::PlayerCharacter::GetSingleton()->GetPosition().GetDistance(dyingActor->GetPosition());
 			_loggerDebug("  Distance: {}", distanceFromPlayer);
@@ -96,8 +110,8 @@ namespace Events {
 			}
 
 			for (auto& foundScript : vm->attachedScripts.find(handle)->second) {
-				_loggerDebug("  Found");
-				if (foundScript->GetTypeInfo()->GetName() != "PTP_QuestMaintenanceScript"sv) continue;
+				_loggerDebug("  Found {}", foundScript->GetTypeInfo()->GetName());
+				if (foundScript->GetTypeInfo()->GetName() != "ptp_questmaintenancescript"sv) continue;
 				_loggerDebug("  Is valid");
 
 				auto deadActorLevel = dyingActor->GetLevel();
