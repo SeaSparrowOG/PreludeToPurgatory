@@ -113,11 +113,12 @@ namespace Hooks {
 
 	void CombatHit::HandleMagickaMitigation(RE::Actor* a_this, RE::HitData* a_hitData)
 	{
-		_loggerInfo("Hardened Weave:");
+		_loggerDebug("Hardened Weave:");
 		auto* redirectPerk = DefaultObjects::ModObject<RE::BGSPerk>("PTP_Entry_PRK_HardenedWeave"sv);
+		auto* redirectDamage = DefaultObjects::ModObject<RE::SpellItem>("PTP_Entry_SPL_HardenedWeaveMagickaDamage"sv);
 		auto* lichRace = DefaultObjects::ModObject<RE::TESRace>("NecroLichRace"sv);
 		auto* silverPerk = DefaultObjects::ModObject<RE::BGSKeyword>("WeapMaterialSilver");
-		if (!redirectPerk || !lichRace || !silverPerk) {
+		if (!redirectPerk || !lichRace || !silverPerk || !redirectDamage) {
 			_loggerError("WARNING! Could not resolve default objects for Combat Hit");
 			return;
 		}
@@ -137,14 +138,37 @@ namespace Hooks {
 			return;
 		}
 
+		auto* lichMC = a_this->GetMagicCaster(RE::MagicSystem::CastingSource::kInstant);
+		if (!lichMC) {
+			_loggerDebug("  No lich Magic Caster");
+			return;
+		}
+
 		auto damage = a_hitData->totalDamage;
-		if (damage > current) {
+		if (damage < current) {
+			auto* firstEffect = *redirectDamage->effects.begin();
+			if (!firstEffect) {
+				_loggerError("WARNING! First effect item not found for redirectDamage!");
+				return;
+			}
+
+			firstEffect->effectItem.magnitude = damage;
+			lichMC->CastSpellImmediate(redirectDamage, false, a_this, 1.0f, false, 0.0f, a_this);
 			a_hitData->totalDamage = 0.0f;
-			a_this->ModActorValue(RE::ActorValue::kMagicka, damage);
+			_loggerDebug("  Full mitigation");
+
 		}
 		else {
-			a_hitData->totalDamage = a_hitData->totalDamage - current;
-			a_this->ModActorValue(RE::ActorValue::kMagicka, current);
+			auto* firstEffect = *redirectDamage->effects.begin();
+			if (!firstEffect) {
+				_loggerError("WARNING! First effect item not found for redirectDamage!");
+				return;
+			}
+
+			firstEffect->effectItem.magnitude = damage - current;
+			a_hitData->totalDamage = damage - current;
+			lichMC->CastSpellImmediate(redirectDamage, false, a_this, 1.0f, false, 0.0f, a_this);
+			_loggerDebug("  Partial mitigation");
 		}
 	}
 
