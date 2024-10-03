@@ -19,6 +19,8 @@ namespace Hooks {
 	private:
 		static void HandleJoinTheMarch(RE::Actor* a_this, RE::HitData* a_hitData);
 
+		static void HandleMagickaMitigation(RE::Actor* a_this, RE::HitData* a_hitData);
+
 		static void HandleDamageDistribution(RE::Actor* a_this, RE::HitData* a_hitData);
 
 		static void Hit(RE::Actor* a_this, RE::HitData* a_hitData);

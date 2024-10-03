@@ -111,6 +111,43 @@ namespace Hooks {
 		zombieMC->CastSpellImmediate(marchSpell, false, a_this, 1.0f, false, 0.0f, zombie);
 	}
 
+	void CombatHit::HandleMagickaMitigation(RE::Actor* a_this, RE::HitData* a_hitData)
+	{
+		_loggerInfo("Hardened Weave:");
+		auto* redirectPerk = DefaultObjects::ModObject<RE::BGSPerk>("PTP_Entry_PRK_HardenedWeave"sv);
+		auto* lichRace = DefaultObjects::ModObject<RE::TESRace>("NecroLichRace"sv);
+		auto* silverPerk = DefaultObjects::ModObject<RE::BGSKeyword>("WeapMaterialSilver");
+		if (!redirectPerk || !lichRace || !silverPerk) {
+			_loggerError("WARNING! Could not resolve default objects for Combat Hit");
+			return;
+		}
+		if (!a_this->HasPerk(redirectPerk) || a_this->GetRace() != lichRace) {
+			_loggerDebug("  Requirements not met");
+			return;
+		}
+		if (a_hitData->weapon && a_hitData->weapon->HasKeyword(silverPerk)) {
+			_loggerDebug("  Weapon is silver");
+			return;
+		}
+		auto max = a_this->GetPermanentActorValue(RE::ActorValue::kMagicka);
+		auto current = a_this->GetActorValue(RE::ActorValue::kMagicka);
+
+		if (current < (max / 2.0f)) {
+			_loggerDebug("  Magicka below 50%");
+			return;
+		}
+
+		auto damage = a_hitData->totalDamage;
+		if (damage > current) {
+			a_hitData->totalDamage = 0.0f;
+			a_this->ModActorValue(RE::ActorValue::kMagicka, damage);
+		}
+		else {
+			a_hitData->totalDamage = a_hitData->totalDamage - current;
+			a_this->ModActorValue(RE::ActorValue::kMagicka, current);
+		}
+	}
+
 	void CombatHit::HandleDamageDistribution(RE::Actor* a_this, RE::HitData* a_hitData)
 	{
 		_loggerInfo("One Mind:");
@@ -158,6 +195,7 @@ namespace Hooks {
 	void CombatHit::Hit(RE::Actor* a_this, RE::HitData* a_hitData)
 	{
 		HandleDamageDistribution(a_this, a_hitData);
+		HandleMagickaMitigation(a_this, a_hitData);
 		_originalCall(a_this, a_hitData);
 		HandleJoinTheMarch(a_this, a_hitData);
 	}
