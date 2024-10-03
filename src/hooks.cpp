@@ -28,11 +28,11 @@ namespace Hooks {
 
 	bool HandleSpellCollisions::HandleCollision(RE::Projectile* a_this, RE::TESObjectREFR* a_target, const RE::NiPoint3* arHitLocation, const RE::NiPoint3* arHitNormal, RE::COL_LAYER aeCollisionLayer, unsigned int auiMaterial, BYTE* a7)
 	{
-		auto* shooter = a_this->shooter.get().get();
-		auto* baseProjectile = a_this->GetProjectileBase();
-		auto* baseMagic = a_this->spell;
+		auto* shooter = a_this ? a_this->shooter.get().get() : nullptr;
+		auto* baseProjectile = a_this ? a_this->GetProjectileBase() : nullptr;
+		auto* baseMagic = a_this ? a_this->spell : nullptr;
 		auto* baseSpell = baseMagic ? baseMagic->As<RE::SpellItem>() : nullptr;
-		auto* targetActor = a_target->As<RE::Actor>();
+		auto* targetActor = a_target ? a_target->As<RE::Actor>() : nullptr;
 		auto* magickaWeaveEffect = DefaultObjects::ModObject<RE::BGSPerk>("PTP_Entry_PRK_MirrorWeave"sv);
 		auto* retalliationSpell = DefaultObjects::ModObject<RE::SpellItem>("PTP_Entry_SPL_MagickaWeaveRetaliation"sv);
 		auto* lichRace = DefaultObjects::ModObject<RE::TESRace>("NecroLichRace"sv);
