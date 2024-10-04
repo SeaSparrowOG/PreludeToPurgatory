@@ -2,6 +2,24 @@
 
 #include "defaultObjects.h"
 
+namespace {
+	void HandleWraithform(RE::Actor* a_deadActor) {
+		auto* player = RE::PlayerCharacter::GetSingleton();
+		auto* healProc = DefaultObjects::ModObject<RE::SpellItem>("PTP_Powers_SPL_WraithformHealProc"sv);
+		auto* wraithForm = DefaultObjects::ModObject<RE::SpellItem>("PTP_Powers_SPL_Wraithform"sv);
+		auto* wraithformEffect = DefaultObjects::ModObject<RE::EffectSetting>("PTP_Powers_MGF_WraithformFFSelf"sv);
+		if (!healProc || !wraithForm || !wraithformEffect) {
+			_loggerError("WARNING! Could not resolve heal and wraithform forms in ActorDeathListener.");
+			return;
+		}
+		if (!player->HasSpell(wraithForm) || !player->HasMagicEffect(wraithformEffect)) return;
+
+		auto* playerMC = player->GetMagicCaster(RE::MagicSystem::CastingSource::kInstant);
+		if (!playerMC) return;
+
+		playerMC->CastSpellImmediate(healProc, false, player, 1.0f, false, 0.0f, player);
+	}
+}
 namespace Events {
 	void SoulTrapListener::RegisterListener()
 	{
@@ -91,6 +109,8 @@ namespace Events {
 			if (!isActorDead || !dyingRef || !dyingActor) return EventResult::kContinue;
 			if (dyingActor->IsCommandedActor()) return EventResult::kContinue;
 			if (RE::PlayerCharacter::GetSingleton()->GetRace() != lichRace) return EventResult::kContinue;
+
+			HandleWraithform(dyingActor);
 
 			auto distanceFromPlayer = RE::PlayerCharacter::GetSingleton()->GetPosition().GetDistance(dyingActor->GetPosition());
 			_loggerDebug("  Distance: {}", distanceFromPlayer);
