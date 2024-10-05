@@ -130,7 +130,7 @@ namespace Hooks {
 			_loggerDebug("  Weapon is silver");
 			return;
 		}
-		auto max = a_this->GetPermanentActorValue(RE::ActorValue::kMagicka);
+		auto max = a_this->GetPermanentActorValue(RE::ActorValue::kMagicka) + a_this->magickaModifiers.modifiers[RE::ACTOR_VALUE_MODIFIERS::kTemporary];
 		auto current = a_this->GetActorValue(RE::ActorValue::kMagicka);
 
 		if (current < (max / 2.0f)) {
