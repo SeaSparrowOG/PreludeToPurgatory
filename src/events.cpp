@@ -3,21 +3,29 @@
 #include "defaultObjects.h"
 
 namespace {
-	void HandleWraithform(RE::Actor* a_deadActor) {
-		auto* player = RE::PlayerCharacter::GetSingleton();
-		auto* healProc = DefaultObjects::ModObject<RE::SpellItem>("PTP_Powers_SPL_WraithformHealProc"sv);
-		auto* wraithForm = DefaultObjects::ModObject<RE::SpellItem>("PTP_Powers_SPL_Wraithform"sv);
+	void HandleWraithform(RE::Actor* a_deadActor, RE::Actor* a_killer) {
+		_loggerDebug("  Wraithform check");
 		auto* wraithformEffect = DefaultObjects::ModObject<RE::EffectSetting>("PTP_Powers_MGF_WraithformFFSelf"sv);
-		if (!healProc || !wraithForm || !wraithformEffect) {
-			_loggerError("WARNING! Could not resolve heal and wraithform forms in ActorDeathListener.");
+		if (!wraithformEffect) {
+			_loggerError("WARNING! Could not resolve wraithform form in ActorDeathListener.");
 			return;
 		}
-		if (!player->HasSpell(wraithForm) || !player->HasMagicEffect(wraithformEffect)) return;
+		if (!a_killer->HasMagicEffect(wraithformEffect)) {
+			_loggerDebug("  Actor does not have wraithform effect {}", _debugEDID(wraithformEffect));
+			return;
+		}
 
-		auto* playerMC = player->GetMagicCaster(RE::MagicSystem::CastingSource::kInstant);
+		a_killer->ModActorValue(RE::ActorValue::kHealth, 50.0f);
+		a_killer->ModActorValue(RE::ActorValue::kMagicka, 50.0f);
+		a_killer->ModActorValue(RE::ActorValue::kStamina, 50.0f);
+		//TODO: This doesn't actually work, possibly because of the ethereal archetype.
+		/*
+		auto* playerMC = a_killer->GetMagicCaster(RE::MagicSystem::CastingSource::kInstant);
 		if (!playerMC) return;
 
-		playerMC->CastSpellImmediate(healProc, false, player, 1.0f, false, 0.0f, player);
+		_loggerDebug("  Casting {}", _debugEDID(healProc));
+		playerMC->CastSpellImmediate(healProc, false, a_killer, 1.0f, false, 0.0f, a_killer);
+		*/
 	}
 }
 namespace Events {
@@ -105,12 +113,14 @@ namespace Events {
 			_loggerDebug("Actor death: {} killed by {}", a_event->actorDying.get()->GetName(), a_event->actorKiller.get()->GetName());
 			auto* dyingRef = a_event->actorDying.get();
 			auto* dyingActor = dyingRef->As<RE::Actor>();
+			auto* killerRef = a_event->actorKiller.get();
+			auto* killerActor = killerRef ? killerRef->As<RE::Actor>() : nullptr;
 			bool isActorDead = dyingRef->IsDead();
-			if (!isActorDead || !dyingRef || !dyingActor) return EventResult::kContinue;
+			if (!isActorDead || !dyingRef || !dyingActor || !killerActor) return EventResult::kContinue;
 			if (dyingActor->IsCommandedActor()) return EventResult::kContinue;
-			if (RE::PlayerCharacter::GetSingleton()->GetRace() != lichRace) return EventResult::kContinue;
+			if (killerActor->GetRace() != lichRace) return EventResult::kContinue;
 
-			HandleWraithform(dyingActor);
+			HandleWraithform(dyingActor, killerActor);
 
 			auto distanceFromPlayer = RE::PlayerCharacter::GetSingleton()->GetPosition().GetDistance(dyingActor->GetPosition());
 			_loggerDebug("  Distance: {}", distanceFromPlayer);
