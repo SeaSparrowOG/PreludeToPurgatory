@@ -2,5 +2,5 @@
 
 namespace Events
 {
-	bool Register();
+	bool Register([[maybe_unused]] const SKSE::MessagingInterface::Message* msg);
 }

@@ -10,6 +10,8 @@
 #include <spdlog/sinks/basic_file_sink.h>
 #include <json/json.h>
 
+#include <CustomSkills/Interfaces.h>
+
 #include "Plugin.h"
 
 #define DLLEXPORT __declspec(dllexport)

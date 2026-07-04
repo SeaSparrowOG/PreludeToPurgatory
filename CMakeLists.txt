@@ -50,6 +50,13 @@ SKSEPlugin_Add(
 )
 
 find_path(CLIB_UTIL_INCLUDE_DIRS "ClibUtil/utils.hpp")
+find_path(
+    CSF_INCLUDE_DIR
+    NAMES CustomSkills/Interfaces.h
+    PATHS
+        ${CMAKE_SOURCE_DIR}/External/CustomSkillsFramework/include
+    NO_DEFAULT_PATH
+)
 find_package(jsoncpp CONFIG REQUIRED)
 
 target_link_libraries(
@@ -62,6 +69,7 @@ target_include_directories(
 	${PROJECT_NAME}
 	PRIVATE
 		${CLIB_UTIL_INCLUDE_DIRS}
+		${CSF_INCLUDE_DIR}
 )
 
 set_target_properties(CommonLibSSE PROPERTIES

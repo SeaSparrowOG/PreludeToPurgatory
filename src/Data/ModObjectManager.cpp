@@ -3,7 +3,6 @@
 namespace Data
 {
 	bool ModObjectManager::PreLoad() {
-		logger::info("Preloading Mod Objects..."sv);
 		logger::info("  - Looking for script {} on quest {}..."sv, ScriptName, QuestName);
 		const auto quest = RE::TESForm::LookupByEditorID<RE::TESQuest>(QuestName);
 		if (!quest) {

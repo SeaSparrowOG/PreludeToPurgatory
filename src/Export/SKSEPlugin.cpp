@@ -1,6 +1,7 @@
 #include "Data/ModObjectManager.h"
 #include "Events/Events.h"
 #include "Hooks/Hooks.h"
+#include "LichdomManager/Lichdom.h"
 #include "Papyrus/Papyrus.h"
 #include "Settings/INI/INISettings.h"
 #include "Settings/JSON/JSONSettings.h"
@@ -11,20 +12,31 @@ static void MessageEventCallback(SKSE::MessagingInterface::Message* a_msg)
 	if (!jsonHolder) {
 		SKSE::stl::report_and_fail("Failed to get internal JSON logger."sv);
 	}
+	static auto* lichdom = LichdomManager::Lichdom::GetSingleton();
+	if (!lichdom) {
+		SKSE::stl::report_and_fail(
+			fmt::format("Failed to find Custom Skills Framework. Check the log at Documents/My Games/Skyrim Special Edition/{}.log for more information."sv, Plugin::NAME)
+		);
+	}
 
 	switch (a_msg->type) {
 	case SKSE::MessagingInterface::kDataLoaded:
 		if (!Data::PreloadModObjects()) {
 			SKSE::stl::report_and_fail(
-				fmt::format("Failed to preload mod objects. Check the log at (Documents/My Games/Skyrim Special Edition/{}.log for more information."sv, Plugin::NAME));
+				fmt::format("Failed to preload mod objects. Check the log at Documents/My Games/Skyrim Special Edition/{}.log for more information."sv, Plugin::NAME));
 		}
 		SECTION_SEPARATOR;
-		if (!Events::Register()) {
+		if (!Events::Register(a_msg)) {
 			SKSE::stl::report_and_fail(
-				fmt::format("Failed to register event listeners. Check the log at (Documents/My Games/Skyrim Special Edition/{}.log for more information."sv, Plugin::NAME));
+				fmt::format("Failed to register event listeners. Check the log at Documents/My Games/Skyrim Special Edition/{}.log for more information."sv, Plugin::NAME));
 		}
 		SECTION_SEPARATOR;
 		jsonHolder->Release();
+		if (!lichdom->HasInitialized()) {
+			SKSE::stl::report_and_fail(
+				"Internal Lichdom manager hasn't initialized. Check that Custom Skills Framework is up to date and working."sv
+			);
+		}
 		logger::info("Finished startup tasks, enjoy your game!"sv);
 		break;
 	default:
@@ -111,6 +123,18 @@ extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface * a_
 		SKSE::stl::report_and_fail(
 			fmt::format("Failed to register the new Papyrus functions. Check the log at (Documents/My Games/Skyrim Special Edition/{}.log for more information."sv, Plugin::NAME));
 	}
+	// Credit: Parapets (Exit-9B on github)
+	SKSE::GetMessagingInterface()->RegisterListener(
+		"CustomSkills",
+		[](auto msg)
+		{
+			if (!LichdomManager::RegisterLichdom(msg)) {
+				SKSE::stl::report_and_fail(
+					fmt::format("Failed to find Custom Skills Framework. Check the log at Documents/My Games/Skyrim Special Edition/{}.log for more information."sv, Plugin::NAME)
+				);
+			}
+			SECTION_SEPARATOR;
+		});
 	
 	return true;
 }
