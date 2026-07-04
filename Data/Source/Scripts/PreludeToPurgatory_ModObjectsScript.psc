@@ -1,0 +1,1 @@
+Scriptname PreludeToPurgatory_ModObjectsScript Extends Quest

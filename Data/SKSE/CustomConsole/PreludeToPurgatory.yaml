@@ -1,0 +1,8 @@
+name: preludetopurgatory
+alias: ptp
+script: SEA_PreludeToPurgatory
+help: Prelude to Purgatory
+subs:
+  - name: getversion
+    alias: gv
+    func: GetVersion

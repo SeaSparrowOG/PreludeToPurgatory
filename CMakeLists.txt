@@ -120,7 +120,7 @@ endif()
 
 set(ARTIFACT_DIR "${CMAKE_BINARY_DIR}/Artifacts")
 set(Textures
-	"${DATA_DIR}/Textures/SeaSparrow/Effects/SEA_Empty.dds"
+	#"${DATA_DIR}/Textures/SeaSparrow/Effects/SEA_Empty.dds"
 )
 
 # ---- Compile Papyrus Scripts and Pack Into Archive ----
