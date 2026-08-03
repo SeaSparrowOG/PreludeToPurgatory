@@ -1,0 +1,3 @@
+Scriptname PTP_Quest_DefaultObjectsScript Extends Quest
+
+Race Property NecroLichRace Auto
