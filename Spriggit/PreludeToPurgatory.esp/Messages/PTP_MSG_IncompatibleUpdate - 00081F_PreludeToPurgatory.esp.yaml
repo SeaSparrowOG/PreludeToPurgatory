@@ -1,0 +1,14 @@
+FormKey: 00081F:PreludeToPurgatory.esp
+EditorID: PTP_MSG_IncompatibleUpdate
+Description:
+  TargetLanguage: English
+  Value: >-
+    Prelude to Purgatory:
+
+    Current installed version is impossible to update to the version installed. Exit the game, uninstall the previous update, and resume.
+Name:
+  TargetLanguage: English
+  Value: 'Prelude: Incompatible Update'
+INAM: 0x00000000
+Flags:
+- MessageBox

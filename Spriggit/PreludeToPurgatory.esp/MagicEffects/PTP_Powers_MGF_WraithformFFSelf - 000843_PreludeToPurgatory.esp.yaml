@@ -1,0 +1,45 @@
+FormKey: 000843:PreludeToPurgatory.esp
+EditorID: PTP_Powers_MGF_WraithformFFSelf
+VirtualMachineAdapter:
+  Scripts:
+  - Name: magicImodScript
+    Properties:
+    - MutagenObjectType: ScriptFloatProperty
+      Name: fStaticDelay
+      Data: 0.15
+    - MutagenObjectType: ScriptObjectProperty
+      Name: IntroFX
+      Object: 064D69:Skyrim.esm
+    - MutagenObjectType: ScriptObjectProperty
+      Name: OutroFX
+      Object: 064D69:Skyrim.esm
+    - MutagenObjectType: ScriptObjectProperty
+      Name: StaticFX
+      Object: 05E93D:Skyrim.esm
+  - Name: magicSetActorAlphaScript
+    Properties:
+    - MutagenObjectType: ScriptFloatProperty
+      Name: AlphaValue
+      Data: 0.33
+    - MutagenObjectType: ScriptBoolProperty
+      Name: FadeToAlpha
+      Data: True
+Name:
+  TargetLanguage: English
+  Value: Wraithform
+MenuDisplayObject: 0435A5:Skyrim.esm
+Flags:
+- NoMagnitude
+- NoArea
+- FXPersist
+MagicSkill: Alteration
+HitShader: 064D67:Skyrim.esm
+Archetype:
+  MutagenObjectType: MagicEffectArchetype
+  Type: Etherealize
+CastType: FireAndForget
+DualCastScale: 1
+Sounds: []
+Description:
+  TargetLanguage: English
+  Value: Assume your Wratihform, becoming unabled to be harmed for <dur> seconds. Whenever a creature dies near you, you regenerate some Health, Magicka, and Stamina.

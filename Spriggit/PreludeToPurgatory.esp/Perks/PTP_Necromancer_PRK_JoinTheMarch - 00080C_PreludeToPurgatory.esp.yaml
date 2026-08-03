@@ -1,0 +1,16 @@
+FormKey: 00080C:PreludeToPurgatory.esp
+EditorID: PTP_Necromancer_PRK_JoinTheMarch
+Name:
+  TargetLanguage: English
+  Value: Join the March
+Description:
+  TargetLanguage: English
+  Value: If an enemy would die within 3 seconds of receiving physical damage from an allied reanimated undead, it is revived under that undead's control.
+Conditions:
+- MutagenObjectType: ConditionFloat
+  Data:
+    MutagenObjectType: HasPerkConditionData
+    Perk: 00080B:PreludeToPurgatory.esp
+  ComparisonValue: 1
+NumRanks: 1
+Playable: True

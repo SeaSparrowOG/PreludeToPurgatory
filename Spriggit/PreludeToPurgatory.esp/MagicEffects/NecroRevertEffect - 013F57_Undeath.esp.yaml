@@ -1,0 +1,172 @@
+FormKey: 013F57:Undeath.esp
+EditorID: NecroRevertEffect
+VirtualMachineAdapter:
+  Scripts:
+  - Name: NecroRevertEffectSCRIPT
+    Properties:
+    - MutagenObjectType: ScriptObjectProperty
+      Name: AbLichNecroCooldown
+      Object: 03034C:Undeath.esp
+    - MutagenObjectType: ScriptObjectProperty
+      Name: AbLichNecroPassive
+      Object: 030349:Undeath.esp
+    - MutagenObjectType: ScriptObjectProperty
+      Name: CrimeFactions
+      Object: 026953:Skyrim.esm
+    - MutagenObjectType: ScriptObjectProperty
+      Name: DLC1FXCastVampireBleedSpell
+      Object: 010E18:Dawnguard.esm
+    - MutagenObjectType: ScriptObjectProperty
+      Name: DragonPriestAbility
+      Object: 09BCCA:Skyrim.esm
+    - MutagenObjectType: ScriptObjectProperty
+      Name: DragonPriestEyeGlowFX
+      Object: 0AA856:Skyrim.esm
+    - MutagenObjectType: ScriptObjectProperty
+      Name: DragonPriestParticlesFX
+      Object: 0AA854:Skyrim.esm
+    - MutagenObjectType: ScriptObjectProperty
+      Name: FXDragonPriestLargeExplosion
+      Object: 0EBB74:Skyrim.esm
+    - MutagenObjectType: ScriptObjectProperty
+      Name: FXfallingSandDragonPriestEffect
+      Object: 0EBB72:Skyrim.esm
+    - MutagenObjectType: ScriptObjectProperty
+      Name: HunterFaction
+      Object: 04E509:Skyrim.esm
+    - MutagenObjectType: ScriptObjectProperty
+      Name: LichAbility
+      Object: 0144C1:Undeath.esp
+    - MutagenObjectType: ScriptObjectProperty
+      Name: LichFaction
+      Object: 02DBAD:Undeath.esp
+    - MutagenObjectType: ScriptObjectProperty
+      Name: LichRace
+      Object: 01772A:Undeath.esp
+    - MutagenObjectType: ScriptObjectProperty
+      Name: LichTransform
+      Object: 00A444:Undeath.esp
+    - MutagenObjectType: ScriptObjectProperty
+      Name: LichTransformEffect
+      Object: 00A443:Undeath.esp
+    - MutagenObjectType: ScriptObjectProperty
+      Name: LightFoot
+      Object: 05820C:Skyrim.esm
+    - MutagenObjectType: ScriptObjectProperty
+      Name: NecroDeathGrip
+      Object: 019EC9:Undeath.esp
+    - MutagenObjectType: ScriptObjectProperty
+      Name: NecroLichColorValue
+      Object: 0EEAC8:UndeathFixes.esp
+    - MutagenObjectType: ScriptObjectProperty
+      Name: NecroLichModelValue
+      Object: 0EEAC9:UndeathFixes.esp
+    - MutagenObjectType: ScriptObjectProperty
+      Name: NecroLichRitualQuest
+      Object: 019EC8:Undeath.esp
+    - MutagenObjectType: ScriptObjectProperty
+      Name: NecroLichSkin01
+      Object: 007E47:Undeath.esp
+    - MutagenObjectType: ScriptObjectProperty
+      Name: NecroLichSkin02
+      Object: 0903D0:Undeath.esp
+    - MutagenObjectType: ScriptObjectProperty
+      Name: NecroLichSkin03
+      Object: 0903D1:Undeath.esp
+    - MutagenObjectType: ScriptObjectProperty
+      Name: NecroLichSkin04
+      Object: 0903D2:Undeath.esp
+    - MutagenObjectType: ScriptObjectProperty
+      Name: NecroLichSkin05
+      Object: 0903D3:Undeath.esp
+    - MutagenObjectType: ScriptObjectProperty
+      Name: NecroLichSkin06
+      Object: 0903D4:Undeath.esp
+    - MutagenObjectType: ScriptObjectProperty
+      Name: NecroLichSkin07
+      Object: 0903D5:Undeath.esp
+    - MutagenObjectType: ScriptObjectProperty
+      Name: NecroLichSkin08
+      Object: 0903D6:Undeath.esp
+    - MutagenObjectType: ScriptObjectProperty
+      Name: NecroLichSkin09
+      Object: 0F2489:Undeath.esp
+    - MutagenObjectType: ScriptObjectProperty
+      Name: NecroLichSkin10
+      Object: 0F248A:Undeath.esp
+    - MutagenObjectType: ScriptObjectProperty
+      Name: NecroLichSkin11
+      Object: 0F248B:Undeath.esp
+    - MutagenObjectType: ScriptObjectProperty
+      Name: NecroLichSkinAyleid
+      Object: 0F3BE0:UndeathFixes.esp
+    - MutagenObjectType: ScriptObjectProperty
+      Name: NecroLichSkinDragonPriest
+      Object: 0E99B5:UndeathFixes.esp
+    - MutagenObjectType: ScriptObjectProperty
+      Name: NecroLichSkinWhiteFlesh
+      Object: 0E99AA:UndeathFixes.esp
+    - MutagenObjectType: ScriptObjectProperty
+      Name: NecroLichSkinWhiteSkel
+      Object: 0E99AB:UndeathFixes.esp
+    - MutagenObjectType: ScriptObjectProperty
+      Name: NecroLichTransformPlayerFireFXShort
+      Object: 2D7138:Undeath.esp
+    - MutagenObjectType: ScriptObjectProperty
+      Name: NecroRevert
+      Object: 013F56:Undeath.esp
+    - MutagenObjectType: ScriptObjectProperty
+      Name: NecroRevertEffect
+      Object: 013F57:Undeath.esp
+    - MutagenObjectType: ScriptObjectProperty
+      Name: NecroTrackingQuest
+      Object: 014F8E:Undeath.esp
+    - MutagenObjectType: ScriptObjectProperty
+      Name: NecroUCLDarkConduit
+      Object: 01EEBD:UndeathFixes.esp
+    - MutagenObjectType: ScriptObjectProperty
+      Name: NecroUCLEtherealAbility
+      Object: 0F3BE1:UndeathFixes.esp
+    - MutagenObjectType: ScriptObjectProperty
+      Name: NecroUCLMasqueradePerk
+      Object: 033311:UndeathFixes.esp
+    - MutagenObjectType: ScriptObjectProperty
+      Name: PreludeManager
+      Object: 00081D:PreludeToPurgatory.esp
+    - MutagenObjectType: ScriptObjectProperty
+      Name: TransformFXExplosion
+      Object: 05AB41:Undeath.esp
+    - MutagenObjectType: ScriptObjectProperty
+      Name: TransformFXParticles
+      Object: 05AB42:Undeath.esp
+    - MutagenObjectType: ScriptBoolProperty
+      Name: Transforming
+Name:
+  TargetLanguage: English
+  Value: Revert Form
+Flags:
+- SnapToNavmesh
+- NoMagnitude
+- NoArea
+- NoRecast
+- PowerAffectsDuration
+BaseCost: 15
+MagicSkill: Alteration
+Archetype:
+  MutagenObjectType: MagicEffectArchetype
+  ActorValue: Health
+HitEffectArt: 07024B:Skyrim.esm
+SkillUsageMultiplier: 0.75
+DualCastScale: 1
+ImageSpaceModifier: 054225:Skyrim.esm
+Sounds:
+- Sound: 03F269:Skyrim.esm
+- Type: Charge
+  Sound: 03C8F9:Skyrim.esm
+- Type: Ready
+  Sound: 03C8FA:Skyrim.esm
+- Type: Release
+  Sound: 03F2B1:Skyrim.esm
+Description:
+  TargetLanguage: English
+  Value: Return to your humanoid form.

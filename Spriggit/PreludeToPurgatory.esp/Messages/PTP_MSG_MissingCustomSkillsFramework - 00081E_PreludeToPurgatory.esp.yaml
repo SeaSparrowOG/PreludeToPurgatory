@@ -1,0 +1,14 @@
+FormKey: 00081E:PreludeToPurgatory.esp
+EditorID: PTP_MSG_MissingCustomSkillsFramework
+Description:
+  TargetLanguage: English
+  Value: >-
+    Prelude to Purgatory:
+
+    Custom Skills Framework not working or not up to date. Please install that before continuing.
+Name:
+  TargetLanguage: English
+  Value: 'Prelude: Missing Custom Skills'
+INAM: 0x00000000
+Flags:
+- MessageBox

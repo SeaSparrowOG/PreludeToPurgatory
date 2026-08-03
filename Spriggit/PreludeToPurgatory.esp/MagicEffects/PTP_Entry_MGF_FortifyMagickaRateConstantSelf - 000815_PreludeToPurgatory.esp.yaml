@@ -1,0 +1,21 @@
+FormKey: 000815:PreludeToPurgatory.esp
+EditorID: PTP_Entry_MGF_FortifyMagickaRateConstantSelf
+Name:
+  TargetLanguage: English
+  Value: Regenerate Magicka
+MenuDisplayObject: 0435A5:Skyrim.esm
+Flags:
+- Recover
+- NoDuration
+- NoArea
+- PowerAffectsMagnitude
+BaseCost: 2
+Archetype:
+  MutagenObjectType: MagicEffectPeakValueModArchetype
+  ActorValue: MagickaRateMult
+DualCastScale: 1
+CastingSoundLevel: Silent
+Sounds: []
+Description:
+  TargetLanguage: English
+  Value: Magicka regenerates <mag>% faster.

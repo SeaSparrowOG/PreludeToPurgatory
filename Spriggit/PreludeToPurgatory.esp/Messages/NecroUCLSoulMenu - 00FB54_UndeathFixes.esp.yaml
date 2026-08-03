@@ -1,0 +1,21 @@
+FormKey: 00FB54:UndeathFixes.esp
+EditorID: NecroUCLSoulMenu
+Description:
+  TargetLanguage: English
+  Value: You stare at the container of your soul, pulsing with your unlife.
+INAM: 0x00000000
+Flags:
+- MessageBox
+MenuButtons:
+- Text:
+    TargetLanguage: English
+    Value: Reconstruct Form
+  Conditions:
+  - MutagenObjectType: ConditionFloat
+    Data:
+      MutagenObjectType: HasPerkConditionData
+      Perk: 00080D:PreludeToPurgatory.esp
+    ComparisonValue: 1
+- Text:
+    TargetLanguage: English
+    Value: Exit

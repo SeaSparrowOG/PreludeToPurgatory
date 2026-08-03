@@ -1,0 +1,39 @@
+FormKey: 000810:PreludeToPurgatory.esp
+EditorID: PTP_Powers_PRK_RiteOfTheDragolich
+Name:
+  TargetLanguage: English
+  Value: Spirit of Midnight
+Description:
+  TargetLanguage: English
+  Value: Grants the "Spirit of Midnight" spell. At will, summon a spirit of midnight to aid you in combat until it is slain.
+Conditions:
+- MutagenObjectType: ConditionFloat
+  Data:
+    MutagenObjectType: HasPerkConditionData
+    Perk: 00080F:PreludeToPurgatory.esp
+  ComparisonValue: 1
+NumRanks: 1
+Playable: True
+Effects:
+- MutagenObjectType: PerkAbilityEffect
+  Ability: 00083A:PreludeToPurgatory.esp
+- MutagenObjectType: PerkEntryPointModifyValue
+  Priority: 1
+  Conditions:
+  - Conditions:
+    - MutagenObjectType: ConditionFloat
+      Data:
+        MutagenObjectType: GetQuestRunningConditionData
+        Quest: 00083C:PreludeToPurgatory.esp
+      ComparisonValue: 1
+  - RunOnTabIndex: 1
+    Conditions:
+    - MutagenObjectType: ConditionFloat
+      Data:
+        MutagenObjectType: GetIsIDConditionData
+        Object: 00083A:PreludeToPurgatory.esp
+      ComparisonValue: 1
+  EntryPoint: ModSpellCost
+  PerkConditionTabCount: 2
+  Modification: Multiply
+  Value: 0

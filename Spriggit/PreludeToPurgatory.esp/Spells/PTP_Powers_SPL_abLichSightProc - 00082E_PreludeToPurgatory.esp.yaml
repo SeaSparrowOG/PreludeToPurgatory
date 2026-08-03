@@ -1,0 +1,21 @@
+FormKey: 00082E:PreludeToPurgatory.esp
+EditorID: PTP_Powers_SPL_abLichSightProc
+Name:
+  TargetLanguage: English
+  Value: Lich Sight
+MenuDisplayObject: 104F70:Skyrim.esm
+EquipmentType: 013F44:Skyrim.esm
+Description:
+  TargetLanguage: English
+  Value: Nearby living creatures, but not undead, machines, or Daedra, can be seen through walls.
+Flags:
+- AreaEffectIgnoresLOS
+- IgnoreResistance
+- NoAbsorbOrReflect
+Type: Ability
+ChargeTime: 3
+HalfCostPerk: 0C44B8:Skyrim.esm
+Effects:
+- BaseEffect: 000830:PreludeToPurgatory.esp
+  Data:
+    Magnitude: 200

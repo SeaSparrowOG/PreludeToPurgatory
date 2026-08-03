@@ -1,0 +1,19 @@
+FormKey: 000828:PreludeToPurgatory.esp
+EditorID: PTP_Necromancer_SPL_abFrozenCadavers
+Name:
+  TargetLanguage: English
+  Value: Frozen Cadavers Cloak
+EquipmentType: 013F44:Skyrim.esm
+Description:
+  TargetLanguage: English
+  Value: ''
+BaseCost: 866
+Flags:
+- IgnoreResistance
+- NoAbsorbOrReflect
+Type: Ability
+ChargeTime: 0.5
+Effects:
+- BaseEffect: 000827:PreludeToPurgatory.esp
+  Data:
+    Magnitude: 150

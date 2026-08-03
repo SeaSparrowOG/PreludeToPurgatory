@@ -1,0 +1,22 @@
+FormKey: 000820:PreludeToPurgatory.esp
+EditorID: PTP_Necromancer_SPL_MinionResurrectSpell
+Name:
+  TargetLanguage: English
+  Value: Minion Revive
+MenuDisplayObject: 1097CC:Skyrim.esm
+EquipmentType: 013F44:Skyrim.esm
+Description:
+  TargetLanguage: English
+  Value: ''
+BaseCost: 5672
+Flags:
+- NoAbsorbOrReflect
+ChargeTime: 0.5
+CastType: FireAndForget
+TargetType: TargetActor
+Range: 999
+Effects:
+- BaseEffect: 000822:PreludeToPurgatory.esp
+  Data:
+    Magnitude: 999
+    Duration: 30

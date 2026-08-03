@@ -1,0 +1,24 @@
+FormKey: 000812:PreludeToPurgatory.esp
+EditorID: PTP_Entry_MGF_MagickaWeaveFX
+Name:
+  TargetLanguage: English
+  Value: Magicka Weave FX
+MenuDisplayObject: 0435A5:Skyrim.esm
+Flags:
+- Recover
+- NoDuration
+- NoArea
+- FXPersist
+- HideInUI
+BaseCost: 999
+SpellmakingCastingTime: 0.5
+Archetype:
+  MutagenObjectType: MagicEffectPeakValueModArchetype
+  ActorValue: Alchemy
+HitEffectArt: 000811:PreludeToPurgatory.esp
+DualCastScale: 1
+CastingSoundLevel: Silent
+Sounds: []
+Description:
+  TargetLanguage: English
+  Value: ''

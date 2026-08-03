@@ -1,0 +1,17 @@
+FormKey: 00082B:PreludeToPurgatory.esp
+EditorID: PTP_Necromancer_HZD_IceTrailHazard
+Name:
+  TargetLanguage: English
+  Value: Ice Hazard
+Model:
+  File: Magic\FrostBarrier01.nif
+  Data: 0x020000000000000000000000
+Limit: 10
+Radius: 3.5
+Lifetime: 4
+TargetInterval: 0.3
+Flags:
+- AlignToImpactNormal
+- DropToGround
+Spell: 08F3F5:Skyrim.esm
+Sound: 0BAD15:Skyrim.esm

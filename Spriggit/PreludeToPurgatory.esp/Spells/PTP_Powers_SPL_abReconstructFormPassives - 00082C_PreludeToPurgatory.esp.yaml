@@ -1,0 +1,17 @@
+FormKey: 00082C:PreludeToPurgatory.esp
+EditorID: PTP_Powers_SPL_abReconstructFormPassives
+Name:
+  TargetLanguage: English
+  Value: Passives
+EquipmentType: 013F44:Skyrim.esm
+Description:
+  TargetLanguage: English
+  Value: ''
+Flags:
+- IgnoreResistance
+- NoAbsorbOrReflect
+Type: Ability
+ChargeTime: 0.5
+Effects:
+- BaseEffect: 00081B:PreludeToPurgatory.esp
+  Data: {}

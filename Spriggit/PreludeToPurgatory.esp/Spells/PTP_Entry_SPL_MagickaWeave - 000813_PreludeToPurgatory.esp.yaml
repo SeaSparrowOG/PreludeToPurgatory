@@ -1,0 +1,63 @@
+FormKey: 000813:PreludeToPurgatory.esp
+EditorID: PTP_Entry_SPL_MagickaWeave
+Name:
+  TargetLanguage: English
+  Value: Magicka Weave
+EquipmentType: 013F44:Skyrim.esm
+Description:
+  TargetLanguage: English
+  Value: ''
+BaseCost: 2840
+Flags:
+- IgnoreResistance
+- NoAbsorbOrReflect
+Type: Ability
+ChargeTime: 0.5
+Effects:
+- BaseEffect: 000812:PreludeToPurgatory.esp
+  Data:
+    Magnitude: 1
+  Conditions:
+  - MutagenObjectType: ConditionFloat
+    Data:
+      MutagenObjectType: GetIsRaceConditionData
+      Race: 01772A:Undeath.esp
+    ComparisonValue: 1
+  - MutagenObjectType: ConditionFloat
+    Data:
+      MutagenObjectType: IsWeaponMagicOutConditionData
+    ComparisonValue: 1
+- BaseEffect: 000814:PreludeToPurgatory.esp
+  Data:
+    Magnitude: 50
+  Conditions:
+  - MutagenObjectType: ConditionFloat
+    Data:
+      MutagenObjectType: GetIsRaceConditionData
+      Race: 01772A:Undeath.esp
+- BaseEffect: 000814:PreludeToPurgatory.esp
+  Data:
+    Magnitude: 100
+  Conditions:
+  - MutagenObjectType: ConditionFloat
+    Data:
+      MutagenObjectType: GetIsRaceConditionData
+      Race: 01772A:Undeath.esp
+    ComparisonValue: 1
+- BaseEffect: 000815:PreludeToPurgatory.esp
+  Data:
+    Magnitude: 25
+  Conditions:
+  - MutagenObjectType: ConditionFloat
+    Data:
+      MutagenObjectType: GetIsRaceConditionData
+      Race: 01772A:Undeath.esp
+- BaseEffect: 000815:PreludeToPurgatory.esp
+  Data:
+    Magnitude: 50
+  Conditions:
+  - MutagenObjectType: ConditionFloat
+    Data:
+      MutagenObjectType: GetIsRaceConditionData
+      Race: 01772A:Undeath.esp
+    ComparisonValue: 1

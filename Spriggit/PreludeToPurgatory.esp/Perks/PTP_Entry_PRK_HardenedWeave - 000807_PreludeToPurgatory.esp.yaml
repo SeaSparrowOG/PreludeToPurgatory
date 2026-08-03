@@ -1,0 +1,44 @@
+FormKey: 000807:PreludeToPurgatory.esp
+EditorID: PTP_Entry_PRK_HardenedWeave
+Name:
+  TargetLanguage: English
+  Value: Hardened Weave
+Description:
+  TargetLanguage: English
+  Value: Your Magicka Weave allows you to partially resist incoming physical damage, converting it to magicka damage. You gain 150 armor in Lich form.
+Conditions:
+- MutagenObjectType: ConditionFloat
+  Data:
+    MutagenObjectType: HasPerkConditionData
+    Perk: 000806:PreludeToPurgatory.esp
+  ComparisonValue: 1
+NumRanks: 1
+Playable: True
+Effects:
+- MutagenObjectType: PerkEntryPointModifyValue
+  Conditions:
+  - Conditions:
+    - MutagenObjectType: ConditionFloat
+      Data:
+        MutagenObjectType: GetIsRaceConditionData
+        Race: 01772A:Undeath.esp
+      ComparisonValue: 1
+    - MutagenObjectType: ConditionFloat
+      CompareOperator: GreaterThan
+      Data:
+        MutagenObjectType: GetActorValuePercentConditionData
+        ActorValue: Magicka
+      ComparisonValue: 0.5
+  - RunOnTabIndex: 2
+    Conditions:
+    - MutagenObjectType: ConditionFloat
+      Data:
+        MutagenObjectType: HasKeywordConditionData
+        Keyword: 10AA1A:Skyrim.esm
+  EntryPoint: ModIncomingDamage
+  PerkConditionTabCount: 3
+  Modification: Multiply
+  Value: 0.75
+- MutagenObjectType: PerkAbilityEffect
+  Priority: 1
+  Ability: 000847:PreludeToPurgatory.esp

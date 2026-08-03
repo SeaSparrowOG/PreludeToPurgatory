@@ -1,0 +1,24 @@
+FormKey: 000836:PreludeToPurgatory.esp
+EditorID: PTP_Powers_SPL_LichSightDetectAlly
+Name:
+  TargetLanguage: English
+  Value: Lich Sight visual Proc
+EquipmentType: 013F44:Skyrim.esm
+Description:
+  TargetLanguage: English
+  Value: ''
+Flags:
+- AreaEffectIgnoresLOS
+- IgnoreResistance
+- NoAbsorbOrReflect
+CastType: Concentration
+TargetType: Aimed
+Effects:
+- BaseEffect: 000831:PreludeToPurgatory.esp
+  Data:
+    Magnitude: 150
+    Duration: 1
+  Conditions:
+  - MutagenObjectType: ConditionFloat
+    Data:
+      MutagenObjectType: IsHostileToActorConditionData

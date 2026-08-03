@@ -1,0 +1,29 @@
+FormKey: 00082A:PreludeToPurgatory.esp
+EditorID: PTP_Necromancer_MGF_FrozenCadaverIceTrail
+VirtualMachineAdapter:
+  Scripts:
+  - Name: PTP_AMEIceTrail
+    Properties:
+    - MutagenObjectType: ScriptObjectProperty
+      Name: PTP_Necromancer_HZD_IceTrailHazard
+      Object: 00082B:PreludeToPurgatory.esp
+Name:
+  TargetLanguage: English
+  Value: Frozen Cadaver Ice Trail
+Flags:
+- NoHitEvent
+- NoMagnitude
+- NoArea
+- HideInUI
+- NoRecast
+- Painless
+Archetype:
+  MutagenObjectType: MagicEffectArchetype
+  Type: Script
+CastType: FireAndForget
+DualCastScale: 1
+CastingSoundLevel: Silent
+Sounds: []
+Description:
+  TargetLanguage: English
+  Value: ''

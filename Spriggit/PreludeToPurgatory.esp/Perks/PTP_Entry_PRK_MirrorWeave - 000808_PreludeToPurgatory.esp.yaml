@@ -1,0 +1,19 @@
+FormKey: 000808:PreludeToPurgatory.esp
+EditorID: PTP_Entry_PRK_MirrorWeave
+Name:
+  TargetLanguage: English
+  Value: Mirror Weave
+Description:
+  TargetLanguage: English
+  Value: Your Magicka weave has a chance based on your Magicka to retaliate against hostile spells. You gain 10% Magic Resist.
+Conditions:
+- MutagenObjectType: ConditionFloat
+  Data:
+    MutagenObjectType: HasPerkConditionData
+    Perk: 000806:PreludeToPurgatory.esp
+  ComparisonValue: 1
+NumRanks: 1
+Playable: True
+Effects:
+- MutagenObjectType: PerkAbilityEffect
+  Ability: 000848:PreludeToPurgatory.esp

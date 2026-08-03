@@ -133,6 +133,7 @@ set(Textures
 
 # ---- Compile Papyrus Scripts and Pack Into Archive ----
 include(Papyrus)
+include(Spriggit)
 include(BSArchive)
 
 if(EXISTS "${PAPYRUS_SOURCE_DIR}" AND IS_DIRECTORY "${Skyrim64Path}")
@@ -140,6 +141,15 @@ if(EXISTS "${PAPYRUS_SOURCE_DIR}" AND IS_DIRECTORY "${Skyrim64Path}")
 		LIST_DIRECTORIES false
 		CONFIGURE_DEPENDS
 		"${PAPYRUS_SOURCE_DIR}/*.psc"
+	)
+
+	Spriggit_Deserialize(
+		"Spriggit"
+		INPUT "${PROJECT_SOURCE_DIR}/Spriggit/PreludeToPurgatory.esp"
+		OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/PreludeToPurgatory.esp"
+		PACKAGE Spriggit.Yaml
+		COMPONENT "PackageOnly"
+		EXCLUDE_FROM_ALL
 	)
 
 	Papyrus_Add(
@@ -181,6 +191,11 @@ if(DEFINED OUTPUT_FOLDER)
 			"${DLL_FOLDER}/$<TARGET_PDB_FILE_NAME:${PROJECT_NAME}>"
 		COMMAND "${CMAKE_COMMAND}"
 			-DSRC_DIR=${DATA_DIR}
+			-DDST_DIR=${OUTPUT_FOLDER}
+			-DPROJECT_NAME=${PROJECT_NAME}
+			-P "${PROJECT_SOURCE_DIR}/CMake/Scripts/CMake-Copy-Artifacts.cmake"
+		COMMAND "${CMAKE_COMMAND}"
+			-DSRC_DIR=${CMAKE_CURRENT_BINARY_DIR}
 			-DDST_DIR=${OUTPUT_FOLDER}
 			-DPROJECT_NAME=${PROJECT_NAME}
 			-P "${PROJECT_SOURCE_DIR}/CMake/Scripts/CMake-Copy-Artifacts.cmake"

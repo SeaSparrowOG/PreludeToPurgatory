@@ -1,0 +1,13 @@
+FormKey: 000806:PreludeToPurgatory.esp
+EditorID: PTP_Entry_PRK_MagickaWeave
+Name:
+  TargetLanguage: English
+  Value: Magicka Weave
+Description:
+  TargetLanguage: English
+  Value: You gain 50 Magicka and 25% Magicka Regeneration, doubled in Lich Form. In Lich form, you are surrounded by a Magicka Weave.
+NumRanks: 1
+Playable: True
+Effects:
+- MutagenObjectType: PerkAbilityEffect
+  Ability: 000813:PreludeToPurgatory.esp

@@ -1,0 +1,16 @@
+FormKey: 00080B:PreludeToPurgatory.esp
+EditorID: PTP_Necromancer_PRK_OneBody
+Name:
+  TargetLanguage: English
+  Value: One Body
+Description:
+  TargetLanguage: English
+  Value: If you would take physical damage, it is first mitigated among your commanded reanimated undead.
+Conditions:
+- MutagenObjectType: ConditionFloat
+  Data:
+    MutagenObjectType: HasPerkConditionData
+    Perk: 00080A:PreludeToPurgatory.esp
+  ComparisonValue: 1
+NumRanks: 1
+Playable: True
