@@ -16,6 +16,14 @@ namespace LichdomManager
 		return lichdom->Initialize(msg);
 	}
 
+	void OpenSkillMenu() {
+		static const auto* lichdom = Lichdom::GetSingleton();
+		if (!lichdom) {
+			return;
+		}
+		lichdom->ShowSkillMenu();
+	}
+
 	bool Lichdom::Initialize(const SKSE::MessagingInterface::Message* msg) {
 		CustomSkills::QueryCustomSkillsInterface(msg, _csfIntfc);
 		if (!_csfIntfc) {
@@ -24,5 +32,9 @@ namespace LichdomManager
 		}
 		logger::info("  - Done!"sv);
 		return true;
+	}
+
+	void Lichdom::ShowSkillMenu() const {
+		_csfIntfc->ShowStatsMenu(skill.data());
 	}
 }

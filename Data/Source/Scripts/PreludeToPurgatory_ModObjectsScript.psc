@@ -1,1 +1,3 @@
 Scriptname PreludeToPurgatory_ModObjectsScript Extends Quest
+
+Race Property NecroLichRace Auto

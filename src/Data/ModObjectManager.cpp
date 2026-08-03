@@ -80,8 +80,8 @@ namespace Data
 	bool ModObjectManager::Verify() {
 		logger::info("Verifying discovered objects:"sv);
 		bool foundAll = true;
-		for (const auto* objectName : EXPECTED_OBJECTS) {
-			if (!objects.contains(std::string(objectName))) {
+		for (const auto& objectName : EXPECTED_OBJECTS) {
+			if (!objects.contains(objectName)) {
 				foundAll = false;
 				logger::critical("  >Failed to find {}.", objectName);
 			}

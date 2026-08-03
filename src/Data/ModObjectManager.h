@@ -28,8 +28,11 @@ namespace Data
 		return nullptr;
 	}
 
-	inline static constexpr std::size_t EXPECTED_MOD_OBJECT_COUNT = 0;
+	inline static constexpr std::size_t EXPECTED_MOD_OBJECT_COUNT = 1;
 
-	inline static constexpr std::array<const char*, EXPECTED_MOD_OBJECT_COUNT> EXPECTED_OBJECTS = {
+	inline static constexpr std::string_view LICH_RACE = "necroLichRace"sv;
+
+	inline static constexpr std::array<std::string_view, EXPECTED_MOD_OBJECT_COUNT> EXPECTED_OBJECTS = {
+		LICH_RACE
 	};
 }
