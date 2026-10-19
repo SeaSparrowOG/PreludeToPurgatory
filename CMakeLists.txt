@@ -212,80 +212,35 @@ install(
 	FILES
 		"$<TARGET_FILE:${PROJECT_NAME}>"
 		"$<TARGET_PDB_FILE:${PROJECT_NAME}>"
-		"${DATA_DIR}/SKSE/Plugins/${PROJECT_NAME}.ini"
-	DESTINATION "01. Core/SKSE/Plugins"
+	DESTINATION "SKSE/Plugins"
 	COMPONENT components
 )
-
 install(
 	FILES
-		"${DATA_DIR}/${PROJECT_NAME}.esp"
-		"${DATA_DIR}/${PROJECT_NAME}.bsa"
-	DESTINATION "01. Core"
+		"${DATA_DIR}/SKSE/Plugins/CustomSkills/Lichdom.json"
+	DESTINATION "SKSE/Plugins/CustomSkills"
 	COMPONENT components
 )
-
 install(
 	FILES
-		"${DATA_DIR}/SKSE/Plugins/${PROJECT_NAME}/defaultFires.json"
-		"${DATA_DIR}/SKSE/Plugins/${PROJECT_NAME}/embersXDCampfires.json"
-		"${DATA_DIR}/SKSE/Plugins/${PROJECT_NAME}/diverseCampfires.json"
-	DESTINATION "02. Fire Options/01. Campfires/SKSE/Plugins/${PROJECT_NAME}/"
+		"${DATA_DIR}/Interface/Translations/PreludeToPurgatory_ENGLISH.txt"
+	DESTINATION "Interface/Translations"
 	COMPONENT components
 )
-
 install(
 	FILES
-		"${DATA_DIR}/SKSE/Plugins/${PROJECT_NAME}/defaultEmbers.json"
-		"${DATA_DIR}/SKSE/Plugins/${PROJECT_NAME}/embersXDEmbers.json"
-	DESTINATION "02. Fire Options/02. Ember Fires/SKSE/Plugins/${PROJECT_NAME}/"
-	COMPONENT components
-)
-
-install(
-	FILES
-		"${DATA_DIR}/SKSE/Plugins/${PROJECT_NAME}/defaultGiantFires.json"
-		"${DATA_DIR}/SKSE/Plugins/${PROJECT_NAME}/embersXDGiantCampfires.json"
-	DESTINATION "02. Fire Options/03. Giant Fires/SKSE/Plugins/${PROJECT_NAME}/"
-	COMPONENT components
-)
-
-install(
-	FILES
-		"${DATA_DIR}/SKSE/Plugins/${PROJECT_NAME}/defaultSmokes.json"
-	DESTINATION "02. Fire Options/04. Smoke Objects/SKSE/Plugins/${PROJECT_NAME}/"
-	COMPONENT components
-)
-
-install(
-	FILES
-		"${DATA_DIR}/Source/Scripts/REF_FurnitureScript.psc"
-		"${DATA_DIR}/Source/Scripts/REF_ObjectRefOffController.psc"
-		"${DATA_DIR}/Source/Scripts/REF_QuestEventHandler.psc"
-		"${DATA_DIR}/Source/Scripts/REF_RefAliasLoadManager.psc"
-		"${DATA_DIR}/Source/Scripts/REF_UtilityFunctions.psc"
-	DESTINATION "03. Sources/Source/Scripts"
-	COMPONENT components
-)
-
-install(
-	FILES
-		"${DATA_DIR}/RainExtinguishesEmbersXD.esp"
-	DESTINATION "04. Patches/Embers XD"
-	COMPONENT components
-)
-
-install(
-	FILES
-		"${PROJECT_SOURCE_DIR}/FOMOD/info.xml"
-		"${PROJECT_SOURCE_DIR}/FOMOD/ModuleConfig.xml"
-	DESTINATION "FOMOD"
-	COMPONENT components
-)
-
-install(
-	FILES
-		"${PROJECT_SOURCE_DIR}/FOMOD/Images/REF_Header.jpg"
-	DESTINATION "FOMOD/Images"
+		"${DATA_DIR}/Source/Scripts/necrolichtransformscript.psc"
+		"${DATA_DIR}/Source/Scripts/necroreverteffectscript.psc"
+		"${DATA_DIR}/Source/Scripts/necrouclphylacterysoulscript.psc"
+		"${DATA_DIR}/Source/Scripts/PTP_AMEConjureDragolich.psc"
+		"${DATA_DIR}/Source/Scripts/PTP_AMEIceTrail.psc"
+		"${DATA_DIR}/Source/Scripts/PTP_AMEJoinTheMarchListener.psc"
+		"${DATA_DIR}/Source/Scripts/PTP_AMEToggleLichight.psc"
+		"${DATA_DIR}/Source/Scripts/PTP_Quest_DefaultObjectsScript.psc"
+		"${DATA_DIR}/Source/Scripts/PTP_QuestFrgmtMidnightManager.psc"
+		"${DATA_DIR}/Source/Scripts/PTP_QuestMaintenanceScript.psc"
+		"${DATA_DIR}/Source/Scripts/PTP_RefAliasMidnightMonitor.psc"
+		"${DATA_DIR}/Source/Scripts/SEA_PTPUtilityFunctions.psc"
+	DESTINATION "Source/Scripts"
 	COMPONENT components
 )
