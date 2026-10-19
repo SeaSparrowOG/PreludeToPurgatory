@@ -2,24 +2,26 @@
 
 #include "defaultObjects.h"
 
-namespace Papyrus {
-    std::vector<int> GetVersion(STATIC_ARGS) {
-        std::vector<int> response = std::vector<int>();
-        response.push_back(Version::MAJOR);
-        response.push_back(Version::MINOR);
-        response.push_back(Version::PATCH);
-
-        return response;
+namespace Papyrus
+{
+    std::vector<int> GetVersion(STATIC_ARGS)
+    {
+        std::vector<int> ver{Plugin::VERSION.major(), Plugin::VERSION.minor(), Plugin::VERSION.patch()};
+        return ver;
     }
 
-    std::vector<RE::Actor*> FetchNearbyCorpses(STATIC_ARGS) {
+    std::vector<RE::Actor *> FetchNearbyCorpses(STATIC_ARGS)
+    {
         _loggerDebug("Called fetch nearby corpses");
-        auto response = std::vector<RE::Actor*>();
-        auto* noReanimateKeyword = DefaultObjects::ModObject<RE::BGSKeyword>("MagicNoReanimate"sv);
-        if (!noReanimateKeyword) return response;
+        auto response = std::vector<RE::Actor *>();
+        auto *noReanimateKeyword = DefaultObjects::ModObject<RE::BGSKeyword>("MagicNoReanimate"sv);
+        if (!noReanimateKeyword)
+            return response;
 
-        if (const auto TES = RE::TES::GetSingleton()) {
-            TES->ForEachReferenceInRange(RE::PlayerCharacter::GetSingleton()->AsReference(), 1500.0f, [&](RE::TESObjectREFR* a_ref) {
+        if (const auto TES = RE::TES::GetSingleton())
+        {
+            TES->ForEachReferenceInRange(RE::PlayerCharacter::GetSingleton()->AsReference(), 1500.0f, [&](RE::TESObjectREFR *a_ref)
+                                         {
                 if (a_ref && a_ref->Is3DLoaded()) {
                     if (auto* actorRef = a_ref->As<RE::Actor>()) {
                         if (actorRef->IsDead() && !actorRef->HasKeyword(noReanimateKeyword)) {
@@ -28,21 +30,21 @@ namespace Papyrus {
                         }
                     }
                 }
-            return RE::BSContainer::ForEachResult::kContinue;
-            });
+            return RE::BSContainer::ForEachResult::kContinue; });
         }
         _loggerInfo("  Returning response");
         return response;
     }
 
-    bool Bind(VM& a_vm)
+    bool Bind(VM &a_vm)
     {
         BIND(GetVersion);
         BIND(FetchNearbyCorpses);
         return true;
     }
 
-    bool RegisterFunctions(VM* a_vm) {
+    bool RegisterFunctions(VM *a_vm)
+    {
         Bind(*a_vm);
         return true;
     }

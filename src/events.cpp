@@ -4,6 +4,7 @@
 
 namespace {
 	void HandleWraithform(RE::Actor* a_deadActor, RE::Actor* a_killer) {
+		(void)a_deadActor;
 		_loggerDebug("  Wraithform check");
 		auto* wraithformEffect = DefaultObjects::ModObject<RE::EffectSetting>("PTP_Powers_MGF_WraithformFFSelf"sv);
 		if (!wraithformEffect) {
@@ -14,10 +15,9 @@ namespace {
 			_loggerDebug("  Actor does not have wraithform effect {}", _debugEDID(wraithformEffect));
 			return;
 		}
-
-		a_killer->ModActorValue(RE::ActorValue::kHealth, 50.0f);
-		a_killer->ModActorValue(RE::ActorValue::kMagicka, 50.0f);
-		a_killer->ModActorValue(RE::ActorValue::kStamina, 50.0f);
+		a_killer->ModActorValue(RE::ACTOR_VALUE_MODIFIER::kDamage, RE::ActorValue::kHealth, 50.0f);
+		a_killer->ModActorValue(RE::ACTOR_VALUE_MODIFIER::kDamage, RE::ActorValue::kMagicka, 50.0f);
+		a_killer->ModActorValue(RE::ACTOR_VALUE_MODIFIER::kDamage, RE::ActorValue::kStamina, 50.0f);
 		//TODO: This doesn't actually work, possibly because of the ethereal archetype.
 		/*
 		auto* playerMC = a_killer->GetMagicCaster(RE::MagicSystem::CastingSource::kInstant);

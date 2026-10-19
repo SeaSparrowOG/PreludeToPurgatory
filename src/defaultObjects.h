@@ -1,7 +1,7 @@
 #pragma once
 
 namespace DefaultObjects {
-	class Storage : public ISingleton<Storage> {
+	class Storage : public REX::TSingleton<Storage> {
 	public:
 		[[nodiscard]] RE::TESForm* Get(std::string_view a_key) const;
 		bool Initialize();
