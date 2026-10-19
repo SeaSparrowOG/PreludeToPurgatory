@@ -7,21 +7,20 @@
 namespace Hooks {
 	void Install()
 	{
-		SKSE::AllocTrampoline(28);
 		HandleSpellCollisions::Install();
 		CombatHit::Install();
 	}
 
 	void CombatHit::Install()
 	{
-		auto& trampoline = SKSE::GetTrampoline();
+		auto& trampoline = REL::GetTrampoline();
 		REL::Relocation<std::uintptr_t> target{ REL::ID(38627), 0x4A8 };
 		_originalCall = trampoline.write_call<5>(target.address(), &Hit);
 	}
 
 	void HandleSpellCollisions::Install()
 	{
-		auto& trampoline = SKSE::GetTrampoline();
+		auto& trampoline = REL::GetTrampoline();
 		REL::Relocation<std::uintptr_t> target{ REL::ID(44204), 0x21F };
 		_originalCall = trampoline.write_call<5>(target.address(), &HandleCollision);
 	}

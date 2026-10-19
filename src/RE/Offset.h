@@ -13,7 +13,7 @@ namespace RE::Offset {
 namespace RE
 {
 	class TESObjectREFR;
-
+/*
 	enum class ACTOR_LOS_LOCATION
 	{
 		kOrigin = 0,
@@ -32,4 +32,5 @@ namespace RE
 			return func(a_origin, a_target, a_speed, a_gravity, a_location);
 		}
 	};
+*/
 }

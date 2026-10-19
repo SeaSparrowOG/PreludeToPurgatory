@@ -1,0 +1,116 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Exit-9B/CustomSkills/main/docs/schema/CustomSkill.json",
+  "version": 1,
+  "skydome": {
+    "model": "SeaSparrow/Interface/INTLichdomPerkSkydome.nif",
+    "cameraRightPoint": 2
+  },
+  "showMenu": null,
+  "debugReload": "PreludeToPurgatory.esp|800",
+  "perkPoints": "PreludeToPurgatory.esp|801",
+  "skills": [
+    {
+      "id": "Lichdom",
+      "name": "$Lichdom_Name",
+      "description": "$Lichdom_Description",
+      "legendary": null,
+      "color": null,
+      "showLevelup": null,
+      "experienceFormula": {
+        "useMult": 1.0,
+        "useOffset": 0.0,
+        "improveMult": 1.0,
+        "improveOffset": 0.0,
+        "enableXPPerRank": false
+      },
+      "nodes": [
+        {
+          "id": "MagickaWeave",
+          "perk": "PreludeToPurgatory.esp|806",
+          "x": -0.1,
+          "y": -0.5,
+          "links": [ 
+            "HardenedWeave", 
+            "MirrorWeave", 
+            "Transcendence", 
+            "SpiritCaller",
+            "Authority"
+          ]
+        },
+        {
+          "id": "Transcendence",
+          "perk": "PreludeToPurgatory.esp|805",
+          "x": -0.15,
+          "y": 0.6
+        },
+        {
+          "id": "HardenedWeave",
+          "perk": "PreludeToPurgatory.esp|807",
+          "x": 0.45,
+          "y": 1,
+          "links": [ "SupremeWeave" ]
+        },
+        {
+          "id": "MirrorWeave",
+          "perk": "PreludeToPurgatory.esp|808",
+          "x": -0.9,
+          "y": 1,
+          "links": [ "SupremeWeave" ]
+        },
+        {
+          "id": "SupremeWeave",
+          "perk": "PreludeToPurgatory.esp|809",
+          "x": -0.1,
+          "y": 1.5
+        },
+        {
+          "id": "SpiritCaller",
+          "perk": "PreludeToPurgatory.esp|80A",
+          "x": 1.4,
+          "y": 0.05,
+          "links": [ "WailsOfTheDamned" ]
+        },
+        {
+          "id": "WailsOfTheDamned",
+          "perk": "PreludeToPurgatory.esp|80B",
+          "x": 2,
+          "y": 0.9,
+          "links": [ "SpiritOfMidnight" ]
+        },
+        {
+          "id": "SpiritOfMidnight",
+          "perk": "PreludeToPurgatory.esp|80C",
+          "x": 2.6,
+          "y": 1.8
+        },
+        {
+          "id": "Authority",
+          "perk": "PreludeToPurgatory.esp|80D",
+          "x": -1.85,
+          "y": 0.05,
+          "links": [ "KissOfTheCobra" ]
+        },
+        {
+          "id": "KissOfTheCobra",
+          "perk": "PreludeToPurgatory.esp|80E",
+          "x": -2.35,
+          "y": 0.9,
+          "links": [ "HeraldOfWinter" ]
+        },
+        {
+          "id": "HeraldOfWinter",
+          "perk": "PreludeToPurgatory.esp|80F",
+          "x": -2.95,
+          "y": 1.8,
+          "links": [ "SpiritFire" ]
+        },
+        {
+          "id": "SpiritFire",
+          "perk": "PreludeToPurgatory.esp|810",
+          "x": -3.0,
+          "y": 3.0
+        }
+      ]
+    }
+  ]
+}

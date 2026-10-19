@@ -4,7 +4,7 @@ namespace Events {
 	using EventResult = RE::BSEventNotifyControl;
 
 	class SoulTrapListener :
-		public ISingleton<SoulTrapListener>,
+		public REX::TSingleton<SoulTrapListener>,
 		public RE::BSTEventSink<RE::SoulsTrapped::Event> {
 	public:
 		void RegisterListener();

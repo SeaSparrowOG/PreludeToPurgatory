@@ -10,7 +10,8 @@
 #include <spdlog/sinks/basic_file_sink.h>
 
 #include <ClibUtil/simpleINI.hpp>
-#include <ClibUtil/singleton.hpp>
+#undef ERROR
+
 #include <ClibUtil/distribution.hpp>
 #include <ClibUtil/editorID.hpp>
 #include <ClibUtil/rng.hpp>
@@ -20,7 +21,6 @@
 #define DLLEXPORT __declspec(dllexport)
 
 using namespace std::literals;
-using namespace clib_util::singleton;
 
 #ifdef SKYRIM_AE
 #	define OFFSET(se, ae) ae
@@ -30,37 +30,12 @@ using namespace clib_util::singleton;
 #	define OFFSET_3(se, ae, vr) se
 #endif
 
-#include "Version.h"
+#include "Plugin.h"
 
 #define _debugEDID clib_util::editorID::get_editorID
-#define _loggerDebug SKSE::log::debug
-#define _loggerInfo SKSE::log::info
-#define _loggerError SKSE::log::error
-
-namespace stl {
-    template <class T>
-    void write_thunk_call(std::uintptr_t a_src)
-    {
-        SKSE::AllocTrampoline(14);
-
-        auto& trampoline = SKSE::GetTrampoline();
-        T::func = trampoline.write_call<5>(a_src, T::thunk);
-    }
-
-    template <typename TDest, typename TSource>
-    constexpr auto write_vfunc() noexcept
-    {
-        REL::Relocation<std::uintptr_t> vtbl{ TDest::VTABLE[0] };
-        TSource::func = vtbl.write_vfunc(TSource::idx, TSource::Thunk);
-    }
-
-    template <typename T>
-    constexpr auto write_vfunc(const REL::ID variant_id) noexcept
-    {
-        REL::Relocation<std::uintptr_t> vtbl{ variant_id };
-        T::func = vtbl.write_vfunc(T::idx, T::Thunk);
-    }
-}
+#define _loggerDebug REX::DEBUG
+#define _loggerInfo REX::INFO
+#define _loggerError REX::ERROR
 
 namespace Utils {
 	template <typename T>
@@ -78,13 +53,11 @@ namespace Utils {
 	}
 
 	template <typename T, typename E>
-	class EventClass : public RE::BSTEventSink<T> {
+	class EventClass : 
+		public RE::BSTEventSink<T>,
+		public REX::TSingleton<E> 
+	{
 	public:
-		static E* GetSingleton() {
-			static E singleton;
-			return std::addressof(singleton);
-		}
-
 		bool RegisterListener() {
 			RE::ScriptEventSourceHolder::GetSingleton()->AddEventSink(this);
 			return true;
@@ -94,14 +67,5 @@ namespace Utils {
 			RE::ScriptEventSourceHolder::GetSingleton()->RemoveEventSink(this);
 			return true;
 		}
-
-	protected:
-		EventClass() = default;
-		~EventClass() = default;
-
-		EventClass(const EventClass&) = delete;
-		EventClass(EventClass&&) = delete;
-		EventClass& operator=(const EventClass&) = delete;
-		EventClass& operator=(EventClass&&) = delete;
 	};
 }
