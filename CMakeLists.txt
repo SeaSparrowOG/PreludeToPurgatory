@@ -219,7 +219,7 @@ install(
 	FILES
 		"${DATA_DIR}/PreludeToPurgatory.bsa"
 		"${DATA_DIR}/PreludeToPurgatory.esp"
-	DESTINATION ""
+	DESTINATION "."
 	COMPONENT components
 )
 install(
