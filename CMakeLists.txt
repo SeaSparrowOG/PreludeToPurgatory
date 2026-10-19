@@ -6,8 +6,8 @@ option(COPY_PSC "Copies any script sources to the MO2 directory (if specified). 
 
 # -------- Project ----------
 project(
-	RainExtinguishesFires
-	VERSION 5.1.3
+	PreludeToPurgatory
+	VERSION 3.0.0
 	LANGUAGES CXX
 )
 
