@@ -217,6 +217,13 @@ install(
 )
 install(
 	FILES
+		"${DATA_DIR}/PreludeToPurgatory.bsa"
+		"${DATA_DIR}/PreludeToPurgatory.esp"
+	DESTINATION ""
+	COMPONENT components
+)
+install(
+	FILES
 		"${DATA_DIR}/SKSE/Plugins/CustomSkills/Lichdom.json"
 	DESTINATION "SKSE/Plugins/CustomSkills"
 	COMPONENT components
