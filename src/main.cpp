@@ -11,6 +11,7 @@ void MessageHandler(SKSE::MessagingInterface::Message* a_message) {
         Events::SoulTrapListener::GetSingleton()->RegisterListener();
         Events::ActorDeathListener::GetSingleton()->RegisterListener();
         Events::HitEventListener::GetSingleton()->RegisterListener();
+        Events::InputEventListener::GetSingleton()->RegisterListener();
 
         if (!DefaultObjects::Storage::GetSingleton()->Initialize()) {
             _loggerError("Failed to get the default objects. Aborting load...");
@@ -43,5 +44,15 @@ SKSE_PLUGIN_LOAD(const SKSE::LoadInterface* a_skse) {
 
     auto messaging = SKSE::GetMessagingInterface();
     messaging->RegisterListener(MessageHandler);
+
+    SKSE::GetMessagingInterface()->RegisterListener(
+        "CustomSkills",
+        [](auto msg)
+        {
+            CustomSkills::QueryCustomSkillsInterface(msg, PluginAPIStorage::get().customSkills);
+            const auto customSkills = PluginAPIStorage::get().customSkills;
+            if (!customSkills)
+                return;
+        });
     return true;
 }

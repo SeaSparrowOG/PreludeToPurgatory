@@ -37,6 +37,20 @@ using namespace std::literals;
 #define _loggerInfo REX::INFO
 #define _loggerError REX::ERROR
 
+#include "CustomSkillsFramework/CustomSkills/Interfaces.h"
+
+class PluginAPIStorage
+{
+public:
+	static PluginAPIStorage &get()
+	{
+		static PluginAPIStorage singleton{};
+		return singleton;
+	}
+
+	CustomSkills::CustomSkillsInterface *customSkills;
+};
+
 namespace Utils {
 	template <typename T>
 	T* ParseForm(const std::string& a_identifier) {

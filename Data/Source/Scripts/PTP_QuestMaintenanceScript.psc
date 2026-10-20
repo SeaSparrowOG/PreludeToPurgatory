@@ -181,11 +181,13 @@ Events
 /;
 
 Event OnKeyDown(Int a_iKeyCode)
-
+; Handled via SKSE more safely now.
+;/
     If (PlayerREF.GetRace() == NecroLichRace && a_iKeyCode == 15 && !Utility.IsInMenuMode())
 
         CustomSkills.OpenCustomSkillMenu("Lichdom")
     EndIf
+/;
 EndEvent
 
 Event OnInit()

@@ -24,4 +24,15 @@ namespace Events {
 	private:
 		EventResult ProcessEvent(const RE::TESHitEvent* a_event, RE::BSTEventSource<RE::TESHitEvent>*) override;
 	};
+
+	class InputEventListener :
+		public REX::TSingleton<InputEventListener>,
+		public RE::BSTEventSink<RE::InputEvent*>
+	{
+	public:
+		[[nodiscard]]
+		void RegisterListener() noexcept;
+	private:
+		virtual RE::BSEventNotifyControl ProcessEvent(RE::InputEvent* const* a_event, RE::BSTEventSource<RE::InputEvent*>*) override;
+	};
 }
