@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.24)
 
-option(COPY_BSA "Copies any generated BSA to the MO2 directory (if specified)." OFF)
+option(COPY_BSA "Copies any generated BSA to the MO2 directory (if specified)." ON)
 option(COPY_PEX "Copies any generated scripts to the MO2 directory (if specified). Applies after the BSA (if enabled)." ON)
 option(COPY_PSC "Copies any script sources to the MO2 directory (if specified). Applies after the BSA (if enabled)." ON)
 
@@ -137,6 +137,8 @@ if(
 		"Papyrus"
 		GAME ${Skyrim64Path}
 		IMPORTS ${CMAKE_CURRENT_SOURCE_DIR}/Data/Source/Scripts
+				${CMAKE_CURRENT_SOURCE_DIR}/ExternalPapyrus/ClassicalLichdom
+				${CMAKE_CURRENT_SOURCE_DIR}/ExternalPapyrus/CustomSkills
 		SOURCES ${${PROJECT_NAME}_SOURCES}
 		OPTIMIZE ANONYMIZE
 	)

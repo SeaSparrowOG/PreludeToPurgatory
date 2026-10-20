@@ -6,10 +6,14 @@ Event OnActivate(ObjectReference akActionRef)
 
 	if (Game.IsPluginInstalled("ccbgssse067-daedinv.esm")) && (Game.IsPluginInstalled("UndeathFixes - The Cause Patch.esp"))
 		NecroUCLAyleidDLCIsPresent.SetValueInt(1)
-;		Debug.Notification("The Cause dlc present.")
 	else
 		NecroUCLAyleidDLCIsPresent.SetValueInt(0)
-;		Debug.Notification("The Cause DLC not present!")
+	endif
+
+	if (Game.IsPluginInstalled("ccvsvsse003-necroarts.esl")) && (Game.IsPluginInstalled("UndeathFixes - Necro Grimoire Patch.esp"))
+		NecroUCLNecroArtsDLCIsPresent.SetValueInt(1)
+	else
+		NecroUCLNecroArtsDLCIsPresent.SetValueInt(0)
 	endif
 	
 	If PlayerRef.HasPerk(NecroPhylacteryRegenPerk)
@@ -23,7 +27,8 @@ Event OnActivate(ObjectReference akActionRef)
 				;/
 				If SoulCount >= 50.0
 					NecroPhylacterySoulCount.SetValue(50.0)		
-					Debug.Notification("You have reached the maximum soul capacity.")
+;					Notification: You have reached the maximum soul capacity
+					NecroPhyMsgMaxSoul.Show()
 					RefreshScalingEffects()
 					HandleFrameworkExceptions()
 				Else
@@ -31,12 +36,14 @@ Event OnActivate(ObjectReference akActionRef)
 						Game.GetPlayer().RemoveItem(SoulGemBlackFilled, 1)
 						NecroPhylacterySoulCount.Mod(1.0)						
 						SoulTrapSoundFX.play(PlayerRef)
-						Debug.Notification("Your phylactery absorbs a black soul.")
+;						Message: Your phylactery absorbs a black soul.
+						NecroPhyMsgAbsorbSoul.Show()
 						RunFeedSoulFrameWork()
 						HandleFrameworkExceptions()
 						RefreshScalingEffects()
 					Else
-						Debug.Notification("You do not have any filled black soul gems to feed to your phylactery.")
+;						Message: You do not have any filled black soul gems to feed to your phylactery.
+						NecroPhyMsgNoSoul.Show()
 						HandleFrameworkExceptions()
 						RefreshScalingEffects()
 					EndIf
@@ -44,9 +51,12 @@ Event OnActivate(ObjectReference akActionRef)
 				
 			elseif ibutton == 1 
 				/;
-				ShowReconstructMenu()		
+				ShowReconstructMenu()	
 				
-			elseif ibutton == 1
+			elseif ibutton == 2 
+				ShowRelocateMenu()	
+				
+			elseif ibutton == 3
 				;SeaSparrow - These are not needed anymore.
 				;HandleFrameworkExceptions()
 				;RefreshScalingEffects()
@@ -63,11 +73,11 @@ Function ShowReconstructMenu()
 		if iButton2 == 0 
 			; player chose flesh
 			NecroLichModelValue.SetValueInt(1)
-			ShowColorMenu()
+			ShowRaceMenu()
 		elseif iButton2 == 1
 			; player chose skeletal
 			NecroLichModelValue.SetValueInt(2)
-			ShowColorMenu()
+			ShowRaceMenu()
 		elseif iButton2 == 2
 			; player chose dragon priest
 			NecroLichModelValue.SetValueInt(3)
@@ -77,35 +87,37 @@ Function ShowReconstructMenu()
 			NecroLichModelValue.SetValueInt(4)
 			ShowLimitedColorMenu()
 		elseif iButton2 == 4
+			; player chose underking
+			NecroLichModelValue.SetValueInt(5)
+			ShowLimitedColorMenu()		
+		elseif iButton2 == 5
 		endif 
 		
 EndFunction
 
-;SeaSparrow - Original value of 10000000 actually breaks the compiler. 
-;Changing to more reasonable value.
 Function ShowColorMenu()
 	int iButton3 = NecroUCLColorMenu.show()
 		
 		if iButton3 == 0 
 			;player chose red
 			NecroLichColorValue.SetValueInt(1)
-			PlayerRef.DamageActorValue("Health", 10000)
+			ShowEyeFXMenu()
 		elseif iButton3 == 1
 			;player chose green
 			NecroLichColorValue.SetValueInt(2)
-			PlayerRef.DamageActorValue("Health", 10000)
+			ShowEyeFXMenu()
 		elseif iButton3 == 2
 			;player chose black
 			NecroLichColorValue.SetValueInt(3)
-			PlayerRef.DamageActorValue("Health", 10000)
+			ShowEyeFXMenu()
 		elseif iButton3 == 3 
 			;player chose white
 			NecroLichColorValue.SetValueInt(4)
-			PlayerRef.DamageActorValue("Health", 10000)
+			ShowEyeFXMenu()
 		elseif iButton3 == 4
 			;player chose ethereal
 			NecroLichColorValue.SetValueInt(5)
-			PlayerRef.DamageActorValue("Health", 10000)
+			ShowEyeFXMenu()
 		elseif iButton3 == 5
 		endif 
 		
@@ -113,16 +125,74 @@ EndFunction
 
 Function ShowLimitedColorMenu()
 	int iButton4 = NecroUCLLimitedColorMenu.show()
-	
-	
+		
 		if iButton4 == 0 
-			PlayerRef.DamageActorValue("Health", 10000)
 			NecroLichColorValue.SetValueInt(3)
+			ShowEyeFXMenu()
 		elseif iButton4 == 1
 			NecroLichColorValue.SetValueInt(5)
-			PlayerRef.DamageActorValue("Health", 10000)
+			ShowEyeFXMenu()
 		elseif iButton4 == 2
 		endif
+EndFunction
+
+Function ShowRaceMenu()
+	int iButton5 = NecroUCLRaceMenu.show()
+		
+		if iButton5 == 0 
+			NecroLichRaceValue.SetValueInt(0)
+			ShowColorMenu()
+		elseif iButton5 == 1
+			NecroLichRaceValue.SetValueInt(1)
+			ShowColorMenu()
+		elseif iButton5 == 2
+			NecroLichRaceValue.SetValueInt(2)
+			ShowColorMenu()
+		elseif iButton5 == 3
+			NecroLichRaceValue.SetValueInt(3)
+			ShowColorMenu()
+		elseif iButton5 == 4
+			NecroLichRaceValue.SetValueInt(4)
+			ShowColorMenu()
+		elseif iButton5 == 5
+		endif
+EndFunction
+
+;SeaSparrow - Original value of 10000000 actually breaks the compiler. 
+;Changing to more reasonable value.
+Function ShowEyeFXMenu()
+	int iButton6 = NecroUCLEyeFXMenu.show()
+	
+		if iButton6 == 0 
+			;purple eyes. this is the default.
+			NecroLichEyeFXValue.SetValueInt(1)
+			PlayerRef.DamageActorValue("Health", 10000)
+		elseif iButton6 == 1
+			;blue eyes
+			NecroLichEyeFXValue.SetValueInt(2)
+			PlayerRef.DamageActorValue("Health", 10000)
+		elseif iButton6 == 2
+			;red eyes
+			NecroLichEyeFXValue.SetValueInt(3)
+			PlayerRef.DamageActorValue("Health", 10000)
+		elseif iButton6 == 3 
+			;green eyes
+			NecroLichEyeFXValue.SetValueInt(4)
+			PlayerRef.DamageActorValue("Health", 10000)
+		elseif iButton6 == 4
+			;no eyes
+			NecroLichEyeFXValue.SetValueInt(5)
+			PlayerRef.DamageActorValue("Health", 10000)
+		elseif iButton6 == 5
+		endif 		
+EndFunction
+
+Function ShowRelocateMenu()
+	int iButton7 = NecroUCLRelocatePhylacteryMenu.show()
+	if iButton7 == 0 
+		NecroUCLRelocatePhylacteryQuest.SetStage(5)
+	elseif iButton7 == 1
+	endif
 EndFunction
 
 Function RunFeedSoulFrameWork()
@@ -161,12 +231,10 @@ Function RunFeedSoulFrameWork()
 		
 	elseif iSoulCount == 20
 		NecroPhyMsg20.Show()
-		PlayerRef.AddSpell(NecroLichMindFlaySpell, true)
-		
-	elseif iSoulCount == 22
-	
-		NecroPhyMsg22.Show()
 		PlayerRef.AddSpell(NecroEnslaveMind, true)
+		
+	elseif iSoulCount == 22	
+		NecroPhyMsg22.Show()
 		
 	elseif iSoulCount == 25
 		NecroPhyMsg25.Show()
@@ -182,10 +250,12 @@ Function RunFeedSoulFrameWork()
         endwhile		
 		
 		Utility.Wait(6.0)
-		;runs once when player reaches 25 souls, to tell them they can now customize lich appearance. Yes, i use debug messagebox here cus im a lazy bum.
-		Debug.Messagebox("You may now reconstruct the appearance of your physical form. At your phylactery, weave flesh and bone to conjure a visage most befitting of you.") 
+		;runs once when player reaches 25 souls, to tell them they can now customize lich appearance.
+		;Message: You may now reconstruct the appearance of your physical form. At your phylactery, weave flesh and bone to conjure a visage most befitting of you.
+		NecroPhyMsgReconstructForm.Show()
 		Utility.Wait(1.0)
-		Debug.Notification("Activate your phylactery to reconstruct your lich appearance.")
+		;Message: Activate your phylactery to reconstruct your lich appearance.
+		NecroPhyMsgReconstructFormNotification.Show()
 
 	
 	elseif iSoulCount == 30
@@ -206,7 +276,7 @@ Function RunFeedSoulFrameWork()
 		
 	elseif iSoulCount == 50
 		NecroPhyMsg50.Show()
-		PlayerRef.AddSpell(NecroSiphonSoulSpell, true)
+		PlayerRef.AddPerk(NecroUCLMovablePerk)
 	else 	
 		NecroPhyMsgBase.Show()		
 	endif
@@ -255,12 +325,6 @@ Function HandleFrameworkExceptions()
 	endif
 	
 	if iSoulCount >= 20
-		if !PlayerRef.HasSpell(NecroLichMindFlaySpell)
-			PlayerRef.AddSpell(NecroLichMindFlaySpell, false)
-		endif
-	endif
-	
-	if iSoulCount >= 22
 		if !PlayerRef.HasSpell(NecroEnslaveMind)
 			PlayerRef.AddSpell(NecroEnslaveMind, false)
 		endif
@@ -306,10 +370,20 @@ Function HandleFrameworkExceptions()
 	endif	
 	
 	if iSoulCount >= 50
-		if !PlayerRef.HasSpell(NecroSiphonSoulSpell)
-			PlayerRef.AddSpell(NecroSiphonSoulSpell, false)
+		if !PlayerRef.HasPerk(NecroUCLMovablePerk)
+			PlayerRef.AddPerk(NecroUCLMovablePerk)
 		endif
 	endif
+	
+	;remove power word kill and mind flay from player
+	if PlayerRef.HasSpell(NecroSiphonSoulSpell)
+		PlayerRef.RemoveSpell(NecroSiphonSoulSpell)
+	endif
+	
+	if PlayerRef.HasSpell(NecroLichMindFlaySpell)
+		PlayerRef.RemoveSpell(NecroLichMindFlaySpell)
+	endif	
+	NecroLichMindFlaySpell
 	
 endFunction
 
@@ -363,6 +437,7 @@ Perk Property NecroUClSoulScaling Auto
 Perk Property NecroUCLHealingPerk Auto
 Perk Property NecroUCLMasqueradePerk Auto
 Perk Property NecroUCLConduitPerk Auto
+Perk Property NecroUCLMovablePerk Auto
 
 SoulGem Property SoulGemBlackFilled Auto
 
@@ -385,17 +460,30 @@ Message Property NecroPhyMsg40 Auto
 Message Property NecroPhyMsg45 Auto
 Message Property NecroPhyMsg50 Auto
 Message Property NecroPhyMsgBase Auto
+Message Property NecroPhyMsgMaxSoul Auto
+Message Property NecroPhyMsgNoSoul Auto
+Message Property NecroPhyMsgAbsorbSoul Auto
+Message Property NecroPhyMsgReconstructForm Auto
+Message Property NecroPhyMsgReconstructFormNotification Auto
 Message Property NecroUCLReconstructMenu Auto
+Message Property NecroUCLRelocatePhylacteryMenu Auto
+Message Property NecroUCLRaceMenu Auto
 Message Property NecroUCLColorMenu Auto
 Message Property NecroUCLLimitedColorMenu Auto
+Message Property NecroUCLEyeFXMenu Auto
 
 GlobalVariable Property NecroPhylacterySoulCount Auto
 GlobalVariable Property NecroLichColorValue Auto
 GlobalVariable Property NecroLichModelValue Auto
-GlobalVariable Property  NecroUCLAyleidDLCIsPresent Auto
+GlobalVariable Property NecroLichRaceValue Auto
+GlobalVariable Property NecroLichEyeFXValue Auto
+GlobalVariable Property NecroUCLAyleidDLCIsPresent Auto
+GlobalVariable Property NecroUCLNecroArtsDLCIsPresent Auto
 
 Sound Property SoulTrapSoundFX Auto
 
 Actor Property PlayerRef Auto
 
 FormList Property CrimeFactions auto
+
+Quest Property NecroUCLRelocatePhylacteryQuest auto
