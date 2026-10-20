@@ -143,11 +143,33 @@ if(
 		OPTIMIZE ANONYMIZE
 	)
 
+	set(DATA_SUBDIRS
+		"textures"
+		"meshes"
+	)
+
+	set(FILES_TO_PACKAGE)
+
+	if(IS_DIRECTORY "${DATA_DIR}")
+    foreach(SUBDIR IN LISTS DATA_SUBDIRS)
+        if(IS_DIRECTORY "${DATA_DIR}/${SUBDIR}")
+            file(GLOB_RECURSE SUBDIR_FILES
+                LIST_DIRECTORIES false
+                "${DATA_DIR}/${SUBDIR}/*"
+            )
+
+            list(APPEND FILES_TO_PACKAGE ${SUBDIR_FILES})
+        endif()
+    endforeach()
+endif()
+
 	BSArchive_Add(
 		"BSA"
 		OUTPUT "${PROJECT_NAME}.bsa"
 		FORMAT SSE
+		PREFIX "${DATA_DIR}"
 		FILES ${Papyrus_OUTPUT}
+			  ${FILES_TO_PACKAGE}
 	)
 else()
 	message(STATUS "No scripts to compile found, won't compress into BSA.")
