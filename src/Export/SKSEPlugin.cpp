@@ -1,5 +1,6 @@
 #include "APIStorage/APIStorage.hpp"
 #include "Data/ModObjects.hpp"
+#include "Events/Events.hpp"
 
 [[nodiscard]]
 std::string FormatFailureMessage(const std::string_view reason) {
@@ -45,6 +46,9 @@ static void MessageEventCallback(SKSE::MessagingInterface::Message* msg) {
         if (!Data::PreloadModObjects()) {
             REX::FAIL(FormatFailureMessage("Failed to preload mod objects"sv));
         }
+		if (!Events::RegisterForGameEvents()) {
+			REX::FAIL(FormatFailureMessage("Failed to register for game events."sv));
+		}
         break;
     default:
 
