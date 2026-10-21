@@ -39,9 +39,11 @@ static void SetupLog() {
 static void MessageEventCallback(SKSE::MessagingInterface::Message* msg) {
     switch (msg->type) {
     case SKSE::MessagingInterface::kDataLoaded:
+		if (!APIStorage::GetAVGInterface()) {
+			REX::FAIL(FormatFailureMessage("Failed to request necessary interfaces."sv));
+		}
         if (!Data::PreloadModObjects()) {
             REX::FAIL(FormatFailureMessage("Failed to preload mod objects"sv));
-            return;
         }
         break;
     default:
@@ -119,7 +121,7 @@ SKSE_PLUGIN_LOAD(const SKSE::LoadInterface * a_skse)
         {
 			SECTION_SEPARATOR;
 			REX::INFO("Resolving Custom Skills Framework API..."sv);
-			auto* customSkills = API::Storage::GetSingleton()->customSkills;
+			auto* customSkills = APIStorage::Storage::GetSingleton()->customSkills;
             CustomSkills::QueryCustomSkillsInterface(msg, customSkills);
 			if (!customSkills) {
 				REX::CRITICAL("  - Custom Skills is still null after resolving."sv);
