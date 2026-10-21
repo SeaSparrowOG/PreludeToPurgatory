@@ -41,6 +41,8 @@ set(SKSE_NO_INSTALL ON)
 if (GOG)
 	add_compile_definitions(SKYRIM_GOG)
 	set(SKSE_COMMONLIBSSE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/External/CommonLibSSE_1.6")
+else()
+	set(SKSE_COMMONLIBSSE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/External/CommonLibSSE")
 endif()
 
 SKSEPlugin_Add(
@@ -51,7 +53,7 @@ SKSEPlugin_Add(
 		README.md
 		vcpkg.json
 	PRECOMPILE_HEADERS
-		src/common/PCH.h
+		src/common/PCH.hpp
 )
 
 find_package(jsoncpp CONFIG REQUIRED)
@@ -70,6 +72,8 @@ target_include_directories(
 	${PROJECT_NAME}
 	PRIVATE
 		${CLIB_UTIL_INCLUDE_DIRS}
+		"${PROJECT_SOURCE_DIR}/External/CustomSkillsFramework/include"
+		"${PROJECT_SOURCE_DIR}/External/ActorValueGenerator/include"
 )
 
 if (MSVC)

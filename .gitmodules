@@ -11,3 +11,6 @@
 	path = External/CommonLibSSE_1.6
 	url = https://github.com/SeaSparrowOG/CommonLibSSE
 	branch = dev-1.6
+[submodule "External/CustomSkillsFramework"]
+	path = External/CustomSkillsFramework
+	url = https://github.com/Exit-9B/CustomSkills
