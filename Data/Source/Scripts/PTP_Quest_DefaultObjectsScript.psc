@@ -5,6 +5,7 @@ Keyword Property WeapMaterialSilver Auto
 Keyword Property MagicNoReanimate Auto 
 
 MagicEffect Property PTP_Powers_MGF_WraithformFFSelf Auto
+MagicEffect Property PTP_Necromancer_FrozenCadaverArmorProc Auto
 
 Perk Property PTP_Entry_PRK_MirrorWeave Auto
 Perk Property PTP_Necromancer_PRK_OneBody Auto
