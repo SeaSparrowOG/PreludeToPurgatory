@@ -31,6 +31,7 @@ namespace Hooks {
 
 	bool HandleSpellCollisions::HandleCollision(RE::Projectile* a_this, RE::TESObjectREFR* a_target, const RE::NiPoint3* arHitLocation, const RE::NiPoint3* arHitNormal, RE::COL_LAYER aeCollisionLayer, unsigned int auiMaterial, BYTE* a7)
 	{
+		_loggerDebug("MirrorWeave:");
 		auto* shooter = a_this ? a_this->shooter.get().get() : nullptr;
 		auto* baseProjectile = a_this ? a_this->GetProjectileBase() : nullptr;
 		auto* baseMagic = a_this ? a_this->spell : nullptr;
@@ -40,15 +41,14 @@ namespace Hooks {
 		auto* retalliationSpell = DefaultObjects::ModObject<RE::SpellItem>("PTP_Entry_SPL_MagickaWeaveRetaliation"sv);
 		auto* lichRace = DefaultObjects::ModObject<RE::TESRace>("NecroLichRace"sv);
 
+		if (!magickaWeaveEffect || !retalliationSpell || !lichRace) {
+			_loggerError("WARNING! Could not resolve default objects for MirrorWeave");
+			return _originalCall(a_this, a_target, arHitLocation, arHitNormal, aeCollisionLayer, auiMaterial, a7);
+		}
 		if (shooter && baseSpell && baseProjectile && targetActor &&
 			targetActor->HasPerk(magickaWeaveEffect) && 
 			targetActor->GetRace() == lichRace &&
-			targetActor->IsWeaponDrawn() &&
 			baseSpell != retalliationSpell) {
-
-			if (!magickaWeaveEffect || !retalliationSpell || !lichRace) {
-				return _originalCall(a_this, a_target, arHitLocation, arHitNormal, aeCollisionLayer, auiMaterial, a7);
-			}
 
 			auto magicka = RE::ActorValue::kMagicka;
 
@@ -76,6 +76,11 @@ namespace Hooks {
 			rotation.x = angle.x;
 			rotation.z = angle.z;
 			RE::Projectile::LaunchSpell(&newHandle, targetActor, retalliationSpell, a_this->GetPosition(), rotation);
+			_loggerDebug("  Spell retaliated");
+		}
+		else
+		{
+			_loggerDebug("  Requirements not met");
 		}
 		return _originalCall(a_this, a_target, arHitLocation, arHitNormal, aeCollisionLayer, auiMaterial, a7);
 	}
@@ -181,7 +186,8 @@ namespace Hooks {
 		auto* redirectPerk = DefaultObjects::ModObject<RE::BGSPerk>("PTP_Necromancer_PRK_OneBody"sv);
 		auto* lichRace = DefaultObjects::ModObject<RE::TESRace>("NecroLichRace"sv);
 		auto* silverPerk = DefaultObjects::ModObject<RE::BGSKeyword>("WeapMaterialSilver");
-		if (!redirectPerk || !lichRace || !silverPerk) {
+		auto* frozenCadaverMagicEffect = DefaultObjects::ModObject<RE::EffectSetting>("PTP_Necromancer_FrozenCadaverArmorProc");
+		if (!redirectPerk || !lichRace || !silverPerk || !frozenCadaverMagicEffect) {
 			_loggerError("WARNING! Could not resolve default objects for Combat Hit");
 			return;
 		}
@@ -201,7 +207,7 @@ namespace Hooks {
 
 			for (; it != end && remaining > 0.0f; ++it) {
 				const auto commandedActor = (*it).commandedActor.get().get();
-				if (commandedActor->actorState1.lifeState == RE::ACTOR_LIFE_STATE::kReanimate) {
+				if (commandedActor->HasMagicEffect(frozenCadaverMagicEffect)) {
 					_loggerDebug("  Valid minion");
 					auto health = commandedActor->GetActorValue(RE::ActorValue::kHealth);
 					if (health >= remaining) {

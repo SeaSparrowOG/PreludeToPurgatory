@@ -6,7 +6,11 @@ namespace RE::Offset {
 	//Github: https://github.com/Exit-9B/Constellations/blob/6cc31c1414e121bd30a6cb74975d35e5195b8675/src/RE/Offset.h#L76C3-L90C4
 	namespace CombatUtilities
 	{
+#ifdef GOG // seems like something above was inlined?
 		inline constexpr REL::ID GetAngleToProjectedTarget(static_cast<std::uint64_t>(47286));
+#else
+		inline constexpr REL::ID GetAngleToProjectedTarget(static_cast<std::uint64_t>(523983));
+#endif
 	}
 }
 
