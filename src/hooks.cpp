@@ -46,6 +46,7 @@ namespace Hooks {
 		if (shooter && baseSpell && baseProjectile && targetActor &&
 			targetActor->HasPerk(magickaWeaveEffect) && 
 			targetActor->GetRace() == lichRace &&
+			targetActor->IsWeaponDrawn() &&
 			baseSpell != retalliationSpell) {
 
 			auto magicka = RE::ActorValue::kMagicka;
