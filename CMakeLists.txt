@@ -255,6 +255,14 @@ install(
 install(
 	FILES
 		"${DATA_DIR}/Interface/Translations/PreludeToPurgatory_ENGLISH.txt"
+		"${DATA_DIR}/Interface/Translations/PreludeToPurgatory_CHINESE.txt"
+		"${DATA_DIR}/Interface/Translations/PreludeToPurgatory_FRENCH.txt"
+		"${DATA_DIR}/Interface/Translations/PreludeToPurgatory_GERMAN.txt"
+		"${DATA_DIR}/Interface/Translations/PreludeToPurgatory_ITALIAN.txt"
+		"${DATA_DIR}/Interface/Translations/PreludeToPurgatory_JAPANESE.txt"
+		"${DATA_DIR}/Interface/Translations/PreludeToPurgatory_POLISH.txt"
+		"${DATA_DIR}/Interface/Translations/PreludeToPurgatory_RUSSIAN.txt"
+		"${DATA_DIR}/Interface/Translations/PreludeToPurgatory_SPANISH.txt"
 	DESTINATION "Interface/Translations"
 	COMPONENT components
 )
@@ -271,6 +279,7 @@ install(
 		"${DATA_DIR}/Source/Scripts/PTP_QuestFrgmtMidnightManager.psc"
 		"${DATA_DIR}/Source/Scripts/PTP_QuestMaintenanceScript.psc"
 		"${DATA_DIR}/Source/Scripts/PTP_RefAliasMidnightMonitor.psc"
+		"${DATA_DIR}/Source/Scripts/PTP_TranscendenceProc.psc"
 		"${DATA_DIR}/Source/Scripts/SEA_PTPUtilityFunctions.psc"
 	DESTINATION "Source/Scripts"
 	COMPONENT components
