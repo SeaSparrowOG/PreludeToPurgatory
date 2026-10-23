@@ -97,7 +97,7 @@ Function CalculateExperience(Float fExperience)
     fExperienceToNextLevel = GetExperienceToNextLevel()
     PTP_Framework_GLB_PerkPoints.Mod(1.0)
 
-    While fExcess >= fExperienceToNextLevel && iLevel <= 12
+    While fExcess >= fExperienceToNextLevel && iLevel <= 14
 
         iLevel += 1
         fExcess -= fExperienceToNextLevel
@@ -156,6 +156,17 @@ Bool Function PreTransform(Actor TheLich)
 
         TheLich.AddSpell(PTP_Entry_SPL_abMirrorWeave)
     EndIf
+
+    If (!TheLich.HasPerk(PTP_Entry_PRK_Transcendence))
+
+        If PlayerIsVampire.GetValue() != 0
+            (PlayerVampireQuest as PlayerVampireQuestScript).VampireCure(TheLich)
+        EndIf
+
+        If TheLich.HasSpell(WerewolfChange)
+            (C00 as CompanionsHousekeepingScript).CurePlayer()
+        EndIf
+    EndIf 
     Return True
 EndFunction
 
@@ -167,12 +178,12 @@ Bool Function PostRevert(Actor TheLich)
         PTP_Powers_QST_DragolichFollowerQuest.Stop()
     EndIf
 
-        TheLich.RemoveSpell(PTP_Necromancer_SPL_abFrozenCadavers)
-        TheLich.RemoveSpell(PTP_Powers_SPL_ToggleLichSight)
-        TheLich.RemoveSpell(PTP_Powers_SPL_Wraithform)
-        TheLich.RemoveSpell(PTP_Powers_SPL_RiteOfTheDragolich)
-        TheLich.RemoveSpell(PTP_Entry_SPL_abMirrorWeave)
-        TheLich.RemoveSpell(PTP_Entry_SPL_abHardenedWeave)
+    TheLich.RemoveSpell(PTP_Necromancer_SPL_abFrozenCadavers)
+    TheLich.RemoveSpell(PTP_Powers_SPL_ToggleLichSight)
+    TheLich.RemoveSpell(PTP_Powers_SPL_Wraithform)
+    TheLich.RemoveSpell(PTP_Powers_SPL_RiteOfTheDragolich)
+    TheLich.RemoveSpell(PTP_Entry_SPL_abMirrorWeave)
+    TheLich.RemoveSpell(PTP_Entry_SPL_abHardenedWeave)
     Return True
 EndFunction
 
@@ -206,5 +217,6 @@ Event OnInit()
     fExperienceToNextLevel = GetExperienceToNextLevel() 
     fCurrentExperience = PTP_Framework_GLB_SkillLevelRatio.GetValue() * fExperienceToNextLevel
 
-    RegisterForKey(15)
+    ;Now handled via SKSE to account better for menus.
+    ;RegisterForKey(15)
 EndEvent
