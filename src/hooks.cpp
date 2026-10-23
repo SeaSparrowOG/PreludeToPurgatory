@@ -91,7 +91,8 @@ namespace Hooks {
 		auto* lichRace = DefaultObjects::ModObject<RE::TESRace>("NecroLichRace"sv);
 		auto* marchPerk = DefaultObjects::ModObject<RE::BGSPerk>("PTP_Necromancer_PRK_JoinTheMarch"sv);
 		auto* marchSpell = DefaultObjects::ModObject<RE::SpellItem>("PTP_Necromancer_SPL_JoinTheMarchListener"sv);
-		if (!lichRace || !marchPerk || !marchSpell) {
+		auto* frozenCadaverMagicEffect = DefaultObjects::ModObject<RE::EffectSetting>("PTP_Necromancer_FrozenCadaverArmorProc");
+		if (!lichRace || !marchPerk || !marchSpell || !frozenCadaverMagicEffect) {
 			_loggerError("  Handle Join the March Error: Failed to resolve default objects.");
 			_loggerError("    March spell: {}", marchSpell ? _debugEDID(marchSpell) : "NULL");
 			_loggerError("    March perk: {}", marchPerk ? _debugEDID(marchPerk) : "NULL");
@@ -111,7 +112,7 @@ namespace Hooks {
 		}
 
 		auto* zombieMC = zombie->GetMagicCaster(RE::MagicSystem::CastingSource::kInstant);
-		if (!zombieMC || zombie->actorState1.lifeState != RE::ACTOR_LIFE_STATE::kReanimate) {
+		if (!zombieMC || !zombie->HasMagicEffect(frozenCadaverMagicEffect)) {
 			_loggerDebug("  {} is not a valid zombie.", zombie->GetName());
 		}
 
