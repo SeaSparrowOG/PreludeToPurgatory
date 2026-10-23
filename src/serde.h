@@ -13,35 +13,29 @@ namespace Serialization
     /// BASIC papyrus stuff in C++ because when god made me, he broke the mold after he accidentally dropped it on my head.
     [[nodiscard]]
     inline void on_load(SKSE::SerializationInterface*) {
-        _loggerInfo("Running load");
         auto* maintainance = DefaultObjects::ModObject<RE::TESQuest>("PTP_Framework_QST_MaintenanceQuest"sv);
         if (!maintainance) {
-            _loggerInfo("No maintenance quest");
             return;
         }
         
         auto* vm = RE::BSScript::Internal::VirtualMachine::GetSingleton();
 		auto* handlePolicy = vm ? vm->GetObjectHandlePolicy() : nullptr;
 		if (!handlePolicy) {
-            _loggerInfo("No handle policy");
 			return;
 		}
 
         RE::VMHandle handle = handlePolicy->GetHandleForObject(RE::TESQuest::FORMTYPE, maintainance);
 		auto found = vm->attachedScripts.find(handle);
 		if (found == vm->attachedScripts.end()) {
-            _loggerInfo("No maitenance in map");
 			return;
 		}
 
         for (auto& script : found->second) {
 			auto* info = script ? script->GetTypeInfo() : nullptr;
 			if (!info || strcmp(info->GetName(), "ptp_questmaintenancescript") != 0) {
-                _loggerInfo("No maitenance script on quest ({})", info ? info->GetName() : "NO INFO");
 				continue;
 			}
 
-            _loggerInfo("Calling Maintenance");
 			auto callback = RE::BSTSmartPointer<RE::BSScript::IStackCallbackFunctor>();
 			auto args = RE::MakeFunctionArguments();
 			const RE::BSFixedString functionName = "Maintenance";

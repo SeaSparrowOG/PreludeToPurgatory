@@ -12,7 +12,6 @@ namespace Papyrus
 
     std::vector<RE::Actor *> FetchNearbyCorpses(STATIC_ARGS)
     {
-        _loggerDebug("Called fetch nearby corpses");
         auto response = std::vector<RE::Actor *>();
         auto *noReanimateKeyword = DefaultObjects::ModObject<RE::BGSKeyword>("MagicNoReanimate"sv);
         if (!noReanimateKeyword)
@@ -26,13 +25,11 @@ namespace Papyrus
                     if (auto* actorRef = a_ref->As<RE::Actor>()) {
                         if (actorRef->IsDead() && !actorRef->HasKeyword(noReanimateKeyword)) {
                             response.push_back(actorRef);
-                            _loggerDebug("  Pushing back {}", actorRef->GetName());
                         }
                     }
                 }
             return RE::BSContainer::ForEachResult::kContinue; });
         }
-        _loggerInfo("  Returning response");
         return response;
     }
 

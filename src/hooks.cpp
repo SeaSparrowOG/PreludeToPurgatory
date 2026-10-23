@@ -31,7 +31,6 @@ namespace Hooks {
 
 	bool HandleSpellCollisions::HandleCollision(RE::Projectile* a_this, RE::TESObjectREFR* a_target, const RE::NiPoint3* arHitLocation, const RE::NiPoint3* arHitNormal, RE::COL_LAYER aeCollisionLayer, unsigned int auiMaterial, BYTE* a7)
 	{
-		_loggerDebug("MirrorWeave:");
 		auto* shooter = a_this ? a_this->shooter.get().get() : nullptr;
 		auto* baseProjectile = a_this ? a_this->GetProjectileBase() : nullptr;
 		auto* baseMagic = a_this ? a_this->spell : nullptr;
@@ -42,7 +41,6 @@ namespace Hooks {
 		auto* lichRace = DefaultObjects::ModObject<RE::TESRace>("NecroLichRace"sv);
 
 		if (!magickaWeaveEffect || !retalliationSpell || !lichRace) {
-			_loggerError("WARNING! Could not resolve default objects for MirrorWeave");
 			return _originalCall(a_this, a_target, arHitLocation, arHitNormal, aeCollisionLayer, auiMaterial, a7);
 		}
 		if (shooter && baseSpell && baseProjectile && targetActor &&
@@ -76,79 +74,58 @@ namespace Hooks {
 			rotation.x = angle.x;
 			rotation.z = angle.z;
 			RE::Projectile::LaunchSpell(&newHandle, targetActor, retalliationSpell, a_this->GetPosition(), rotation);
-			_loggerDebug("  Spell retaliated");
-		}
-		else
-		{
-			_loggerDebug("  Requirements not met");
 		}
 		return _originalCall(a_this, a_target, arHitLocation, arHitNormal, aeCollisionLayer, auiMaterial, a7);
 	}
 
-	void CombatHit::HandleJoinTheMarch(RE::Actor* a_this, RE::HitData* a_hitData)
-	{
-		_loggerDebug("Join the March:");
+	void CombatHit::HandleJoinTheMarch(RE::Actor* a_this, RE::HitData* a_hitData) {
 		auto* lichRace = DefaultObjects::ModObject<RE::TESRace>("NecroLichRace"sv);
 		auto* marchPerk = DefaultObjects::ModObject<RE::BGSPerk>("PTP_Necromancer_PRK_JoinTheMarch"sv);
 		auto* marchSpell = DefaultObjects::ModObject<RE::SpellItem>("PTP_Necromancer_SPL_JoinTheMarchListener"sv);
 		if (!lichRace || !marchPerk || !marchSpell) {
-			_loggerError("  Handle Join the March Error: Failed to resolve default objects.");
-			_loggerError("    March spell: {}", marchSpell ? _debugEDID(marchSpell) : "NULL");
-			_loggerError("    March perk: {}", marchPerk ? _debugEDID(marchPerk) : "NULL");
-			_loggerError("    Lich race: {}", lichRace ? _debugEDID(lichRace) : "NULL");
 			return;
 		}
 
 		auto* zombie = a_hitData->aggressor.get().get();
 		auto* commandingActor = zombie ? zombie->GetCommandingActor().get() : nullptr;
 		if (!commandingActor) {
-			_loggerDebug("  {} is not a commanded actor", zombie ? zombie->GetName() : "NULL");
 			return;
 		}
 		if (!commandingActor->HasPerk(marchPerk) || commandingActor->GetRace() != lichRace) {
-			_loggerDebug("  {} does not fit the criterial.", commandingActor->GetName());
 			return;
 		}
 
 		auto* zombieMC = zombie->GetMagicCaster(RE::MagicSystem::CastingSource::kInstant);
 		if (!zombieMC || zombie->actorState1.lifeState != RE::ACTOR_LIFE_STATE::kReanimate) {
-			_loggerDebug("  {} is not a valid zombie.", zombie->GetName());
+			return;
 		}
-
-		_loggerDebug("  Faux onhit");
 		zombieMC->CastSpellImmediate(marchSpell, false, a_this, 1.0f, false, 0.0f, zombie);
 	}
 
 	void CombatHit::HandleMagickaMitigation(RE::Actor* a_this, RE::HitData* a_hitData)
 	{
-		_loggerDebug("Hardened Weave:");
 		auto* redirectPerk = DefaultObjects::ModObject<RE::BGSPerk>("PTP_Entry_PRK_HardenedWeave"sv);
 		auto* redirectDamage = DefaultObjects::ModObject<RE::SpellItem>("PTP_Entry_SPL_HardenedWeaveMagickaDamage"sv);
 		auto* lichRace = DefaultObjects::ModObject<RE::TESRace>("NecroLichRace"sv);
 		auto* silverPerk = DefaultObjects::ModObject<RE::BGSKeyword>("WeapMaterialSilver");
 		if (!redirectPerk || !lichRace || !silverPerk || !redirectDamage) {
-			_loggerError("WARNING! Could not resolve default objects for Combat Hit");
 			return;
 		}
 		if (!a_this->HasPerk(redirectPerk) || a_this->GetRace() != lichRace) {
-			_loggerDebug("  Requirements not met");
 			return;
 		}
 		if (a_hitData->weapon && a_hitData->weapon->HasKeyword(silverPerk)) {
-			_loggerDebug("  Weapon is silver");
 			return;
 		}
 		auto max = a_this->GetPermanentActorValue(RE::ActorValue::kMagicka) + a_this->magickaModifiers.modifiers[RE::ACTOR_VALUE_MODIFIERS::kTemporary];
 		auto current = a_this->GetActorValue(RE::ActorValue::kMagicka);
 
 		if (current < (max / 2.0f)) {
-			_loggerDebug("  Magicka below 50%");
 			return;
 		}
 
 		auto* lichMC = a_this->GetMagicCaster(RE::MagicSystem::CastingSource::kInstant);
 		if (!lichMC) {
-			_loggerDebug("  No lich Magic Caster");
 			return;
 		}
 
@@ -156,47 +133,39 @@ namespace Hooks {
 		if (damage < current) {
 			auto* firstEffect = *redirectDamage->effects.begin();
 			if (!firstEffect) {
-				_loggerError("WARNING! First effect item not found for redirectDamage!");
 				return;
 			}
 
 			firstEffect->effectItem.magnitude = damage;
 			lichMC->CastSpellImmediate(redirectDamage, false, a_this, 1.0f, false, 0.0f, a_this);
 			a_hitData->totalDamage = 0.0f;
-			_loggerDebug("  Full mitigation");
 
 		}
 		else {
 			auto* firstEffect = *redirectDamage->effects.begin();
 			if (!firstEffect) {
-				_loggerError("WARNING! First effect item not found for redirectDamage!");
 				return;
 			}
 
 			firstEffect->effectItem.magnitude = damage - current;
 			a_hitData->totalDamage = damage - current;
 			lichMC->CastSpellImmediate(redirectDamage, false, a_this, 1.0f, false, 0.0f, a_this);
-			_loggerDebug("  Partial mitigation");
 		}
 	}
 
 	void CombatHit::HandleDamageDistribution(RE::Actor* a_this, RE::HitData* a_hitData)
 	{
-		_loggerDebug("One Mind:");
 		auto* redirectPerk = DefaultObjects::ModObject<RE::BGSPerk>("PTP_Necromancer_PRK_OneBody"sv);
 		auto* lichRace = DefaultObjects::ModObject<RE::TESRace>("NecroLichRace"sv);
 		auto* silverPerk = DefaultObjects::ModObject<RE::BGSKeyword>("WeapMaterialSilver");
 		auto* frozenCadaverMagicEffect = DefaultObjects::ModObject<RE::EffectSetting>("PTP_Necromancer_FrozenCadaverArmorProc");
 		if (!redirectPerk || !lichRace || !silverPerk || !frozenCadaverMagicEffect) {
-			_loggerError("WARNING! Could not resolve default objects for Combat Hit");
 			return;
 		}
 		if (!a_this->HasPerk(redirectPerk) || a_this->GetRace() != lichRace) {
-			_loggerDebug("  Requirements not met");
 			return;
 		}
 		if (a_hitData->weapon && a_hitData->weapon->HasKeyword(silverPerk)) {
-			_loggerDebug("  Weapon is silver");
 			return;
 		}
 
@@ -208,7 +177,6 @@ namespace Hooks {
 			for (; it != end && remaining > 0.0f; ++it) {
 				const auto commandedActor = (*it).commandedActor.get().get();
 				if (commandedActor->HasMagicEffect(frozenCadaverMagicEffect)) {
-					_loggerDebug("  Valid minion");
 					auto health = commandedActor->GetActorValue(RE::ActorValue::kHealth);
 					if (health >= remaining) {
 						remaining -= health;

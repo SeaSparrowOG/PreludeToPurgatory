@@ -14,13 +14,11 @@ namespace DefaultObjects {
 	{
 		const auto* quest = RE::TESForm::LookupByEditorID(QuestName);
 		if (!quest) {
-			_loggerError("DefaultObjects: Failed to get Quest");
 			return false;
 		}
 
 		const auto vm = RE::BSScript::Internal::VirtualMachine::GetSingleton();
 		if (!vm) {
-			_loggerError("DefaultObjects: Failed to get VM");
 			return false;
 		}
 
@@ -28,7 +26,6 @@ namespace DefaultObjects {
 		const auto handlePolicy = vm->GetObjectHandlePolicy();
 
 		if (!bindPolicy || !handlePolicy) {
-			_loggerError("DefaultObjects: Failed to get VM object policies");
 			return false;
 		}
 
@@ -46,10 +43,6 @@ namespace DefaultObjects {
 			}
 		}
 		
-		for (auto& [name, var] : objects) {
-			_loggerDebug("Default Object: {} -> {}", name, _debugEDID(var));
-		}
-
 		vm->ResetAllBoundObjects(handle);
 		return true;
 	}
