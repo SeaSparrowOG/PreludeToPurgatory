@@ -94,9 +94,18 @@ namespace Hooks {
 		if (!commandingActor->HasPerk(marchPerk) || commandingActor->GetRace() != lichRace) {
 			return;
 		}
+		
+		auto* dobj = RE::BGSDefaultObjectManager::GetSingleton();
+		auto* undeadKeyword = dobj ? dobj->GetObject<RE::BGSKeyword>(RE::DEFAULT_OBJECTS::kKeywordUndead) : nullptr;
+		const bool isVictimUndeadMinion = zombie->IsCommandedActor() &&
+			zombie->IsReanimated() || (undeadKeyword && zombie->HasKeyword(undeadKeyword));
+
+		if (!isVictimUndeadMinion) {
+			return;
+		}
 
 		auto* zombieMC = zombie->GetMagicCaster(RE::MagicSystem::CastingSource::kInstant);
-		if (!zombieMC || zombie->actorState1.lifeState != RE::ACTOR_LIFE_STATE::kReanimate) {
+		if (!zombieMC) {
 			return;
 		}
 		zombieMC->CastSpellImmediate(marchSpell, false, a_this, 1.0f, false, 0.0f, zombie);

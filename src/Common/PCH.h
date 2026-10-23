@@ -11,6 +11,7 @@
 
 #include <ClibUtil/simpleINI.hpp>
 #undef ERROR
+#undef GetObject
 
 #include <ClibUtil/distribution.hpp>
 #include <ClibUtil/editorID.hpp>

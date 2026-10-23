@@ -176,7 +176,12 @@ namespace Events {
 			return EventResult::kContinue;
 		}
 
-		if (!eventVictim->IsCommandedActor() || eventVictim->actorState1.lifeState != RE::ACTOR_LIFE_STATE::kReanimate) {
+		auto* dobj = RE::BGSDefaultObjectManager::GetSingleton();
+		auto* undeadKeyword = dobj ? dobj->GetObject<RE::BGSKeyword>(RE::DEFAULT_OBJECTS::kKeywordUndead) : nullptr;
+		const bool isVictimUndeadMinion = eventVictim->IsCommandedActor() &&
+			eventVictim->IsReanimated() || (undeadKeyword && eventVictim->HasKeyword(undeadKeyword));
+
+		if (!isVictimUndeadMinion) {
 			return EventResult::kContinue;
 		}
 		if (eventAggressor->GetRace() != lichRace || !eventAggressor->HasPerk(frozenCadaverPerk) || eventAggressor != eventVictim->GetCommandingActor().get()) {
