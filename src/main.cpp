@@ -4,6 +4,7 @@
 #include "events.h"
 #include "hooks.h"
 #include "papyrus.h"
+#include "serde.h"
 
 void MessageHandler(SKSE::MessagingInterface::Message* a_message) {
     if (a_message->type == SKSE::MessagingInterface::kDataLoaded) {
@@ -41,6 +42,8 @@ SKSE_PLUGIN_LOAD(const SKSE::LoadInterface* a_skse) {
     info.trampoline = true;
     info.trampolineSize = 280u; // temporary, FIX LATER
     SKSE::Init(a_skse, info);
+
+    Serialization::RegisterSerialization();
 
     auto messaging = SKSE::GetMessagingInterface();
     messaging->RegisterListener(MessageHandler);
