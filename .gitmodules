@@ -12,3 +12,9 @@
 	path = External/ActorValueGenerator
 	url = https://github.com/NoahBoddie/actor-value-generator
 	branch = development
+[submodule "Tools/Bethesda-CMakeModules"]
+	path = Tools/Bethesda-CMakeModules
+	url = https://github.com/SeaSparrowOG/Bethesda-CMakeModules
+[submodule "Tools/SKSE-CMakeModules"]
+	path = Tools/SKSE-CMakeModules
+	url = https://github.com/SeaSparrowOG/SKSE-CMakeModules
