@@ -195,7 +195,7 @@ Spriggit_Deserialize(
 	PACKAGE Spriggit.Yaml)
 
 # ---- Automatically copy artifacts to MO2 ----
-if(DEFINED OUTPUT_FOLDER AND NOT SKIP_ARTIFACTS)
+if(DEFINED OUTPUT_FOLDER)
     set(DLL_FOLDER "${OUTPUT_FOLDER}/SKSE/Plugins")
 
     add_custom_command(
@@ -211,32 +211,6 @@ if(DEFINED OUTPUT_FOLDER AND NOT SKIP_ARTIFACTS)
 			-DPROJECT_NAME="${PROJECT_NAME}"
 			-P "${PROJECT_SOURCE_DIR}/CMake/Scripts/CMake-Copy-Artifacts.cmake"
     )
-
-    if(COPY_BSA)
-		add_custom_command(
-			TARGET "${PROJECT_NAME}"
-			POST_BUILD
-			COMMAND "${CMAKE_COMMAND}"
-				-DSRC_DIR="${PROJECT_SOURCE_DIR}/Data"
-				-DDST_DIR=${OUTPUT_FOLDER}
-				-DPROJECT_NAME=${PROJECT_NAME}
-				-DBINARY_DIR=${CMAKE_BINARY_DIR}
-				-P "${PROJECT_SOURCE_DIR}/CMake/Scripts/CMake-Copy-Archive.cmake"
-			VERBATIM
-		)
-	endif()
-
-	if(COPY_PSC)
-        add_custom_command(
-        TARGET "${PROJECT_NAME}"
-        POST_BUILD
-        COMMAND "${CMAKE_COMMAND}"
-            -DSOURCE_SCRIPTS="${PROJECT_SOURCE_DIR}/Data/Source/Scripts"
-            -DOUTPUT_FOLDER="${OUTPUT_FOLDER}"
-            -P "${PROJECT_SOURCE_DIR}/CMake/Scripts/CMake-Copy-Sources.cmake"
-        VERBATIM
-		)
-    endif()
 endif()
 
 # ---- Github Release Stuff ----
@@ -250,8 +224,8 @@ install(
 )
 install(
 	FILES
-		"${PROJECT_BINARY_DIR}/${PROJECT_NAME}.esp"
-		"${PROJECT_BINARY_DIR}/${PROJECT_NAME}.bsa"
+		"${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.esp"
+		"${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.bsa"
 	DESTINATION "."
 	COMPONENT components
 )
