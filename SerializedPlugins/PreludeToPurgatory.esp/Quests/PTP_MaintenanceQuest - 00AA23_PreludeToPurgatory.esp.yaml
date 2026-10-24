@@ -1,0 +1,24 @@
+FormKey: 00AA23:PreludeToPurgatory.esp
+EditorID: PTP_MaintenanceQuest
+VirtualMachineAdapter:
+  Scripts:
+  - Name: PTP_MaintenanceScript
+  FileName: ''
+  Aliases:
+  - Property:
+      Name: ''
+      Object: 00AA23:PreludeToPurgatory.esp
+      Alias: 0
+    Scripts:
+    - Name: PTP_OnLoadListener
+Name:
+  TargetLanguage: English
+  Value: 'Prelude: Maintenance Quest'
+Event: CLOC
+NextAliasID: 1
+Aliases:
+- Name: PlayerAlias
+  Flags:
+  - AllowReserved
+  ForcedReference: 000014:Skyrim.esm
+  VoiceTypes: Null

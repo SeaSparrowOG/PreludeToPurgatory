@@ -18,7 +18,7 @@
         "VCPKG_OVERLAY_PORTS": "${sourceDir}/cmake/ports;${sourceDir}/External/CommonLibSSE/cmake/ports",
         "VCPKG_TARGET_TRIPLET": "x64-windows-static",
         "GOG": false,
-        "SKIP_ARTIFACTS": false,
+        "SKIP_PAPYRUS_COMPILATION": false,
         "CMAKE_BUILD_TYPE": "Release"
       }
     },
@@ -42,7 +42,7 @@
       ],
       "cacheVariables": {
         "GOG": true,
-        "SKIP_ARTIFACTS": true
+        "SKIP_PAPYRUS_COMPILATION": true
       }
     },
     {
@@ -53,7 +53,7 @@
         "base"
       ],
       "cacheVariables": {
-        "SKIP_ARTIFACTS": true
+        "SKIP_PAPYRUS_COMPILATION": true
       }
     }
   ]

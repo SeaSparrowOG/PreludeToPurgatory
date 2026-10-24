@@ -1,0 +1,9 @@
+FormKey: 00AA24:PreludeToPurgatory.esp
+EditorID: PTPMaintenanceNode
+Parent: 01320E:Skyrim.esm
+PreviousSibling: 00308C:HearthFires.esm
+QuestFlags:
+- SharesEvent
+MaxConcurrentQuests: 0
+Quests:
+- Quest: 00AA23:PreludeToPurgatory.esp

@@ -1,0 +1,17 @@
+FormKey: 00AA22:PreludeToPurgatory.esp
+EditorID: PTP_ModObjectsQuest
+VirtualMachineAdapter:
+  Scripts:
+  - Name: PTP_ModObjectsScript
+  Versioning:
+  - Break0
+  ExtraBindDataVersion: 0
+  FileName: ''
+Name:
+  TargetLanguage: English
+  Value: 'Prelude: Mod Objects Quest'
+Flags:
+- StartGameEnabled
+- 0x10
+- RunOnce
+NextAliasID: 1

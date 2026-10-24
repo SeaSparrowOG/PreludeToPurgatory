@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.24)
 
 option(COPY_BSA "Copies any generated BSA to the MO2 directory (if specified)." ON)
-option(COPY_PEX "Copies any generated scripts to the MO2 directory (if specified). Applies after the BSA (if enabled)." ON)
+option(COPY_PEX "Copies any generated scripts to the MO2 directory (if specified). Applies after the BSA (if enabled)." OFF)
 option(COPY_PSC "Copies any script sources to the MO2 directory (if specified). Applies after the BSA (if enabled)." ON)
 
 # -------- Project ----------
@@ -124,9 +124,10 @@ endif()
 # ---- Compile Papyrus Scripts and Pack Into Archive ----
 include(Papyrus)
 include(BSArchive)
+include(Spriggit)
 
 if(
-	NOT SKIP_ARTIFACTS
+	NOT SKIP_PAPYRUS_COMPILATION
 	AND Skyrim64Path
 	AND IS_DIRECTORY "${Skyrim64Path}/tools"
 	AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/Data/Source/Scripts"
@@ -147,37 +148,51 @@ if(
 		OPTIMIZE ANONYMIZE
 	)
 
-	set(DATA_SUBDIRS
-		"textures"
-		"meshes"
+	add_custom_target(CopyPapyrusScripts ALL
+		COMMAND "${CMAKE_COMMAND}"
+			"-DCOMPILED_SCRIPTS=${CMAKE_BINARY_DIR}/Scripts"
+			"-DOUTPUT_FOLDER=${DATA_DIR}"
+			-P "${PROJECT_SOURCE_DIR}/CMake/Scripts/CMake-Copy-Scripts.cmake"
+		VERBATIM
 	)
 
-	set(FILES_TO_PACKAGE)
-
-	if(IS_DIRECTORY "${DATA_DIR}")
-    foreach(SUBDIR IN LISTS DATA_SUBDIRS)
-        if(IS_DIRECTORY "${DATA_DIR}/${SUBDIR}")
-            file(GLOB_RECURSE SUBDIR_FILES
-                LIST_DIRECTORIES false
-                "${DATA_DIR}/${SUBDIR}/*"
-            )
-
-            list(APPEND FILES_TO_PACKAGE ${SUBDIR_FILES})
-        endif()
-    endforeach()
+	add_dependencies(CopyPapyrusScripts Papyrus)
 endif()
 
-	BSArchive_Add(
-		"BSA"
-		OUTPUT "${PROJECT_NAME}.bsa"
-		FORMAT SSE
-		PREFIX "${DATA_DIR}"
-		FILES ${Papyrus_OUTPUT}
-			  ${FILES_TO_PACKAGE}
-	)
-else()
-	message(STATUS "No scripts to compile found, won't compress into BSA.")
+set(DATA_SUBDIRS
+	"textures"
+	"meshes"
+	"scripts"
+)
+
+set(FILES_TO_PACKAGE)
+
+if(IS_DIRECTORY "${DATA_DIR}")
+	foreach(SUBDIR IN LISTS DATA_SUBDIRS)
+		if(IS_DIRECTORY "${DATA_DIR}/${SUBDIR}")
+			file(GLOB_RECURSE SUBDIR_FILES
+				LIST_DIRECTORIES false
+				"${DATA_DIR}/${SUBDIR}/*"
+			)
+
+			list(APPEND FILES_TO_PACKAGE ${SUBDIR_FILES})
+		endif()
+	endforeach()
 endif()
+
+BSArchive_Add(
+	"BSA"
+	OUTPUT "${PROJECT_NAME}.bsa"
+	FORMAT SSE
+	PREFIX "${DATA_DIR}"
+	FILES ${FILES_TO_PACKAGE}
+)
+
+Spriggit_Deserialize(
+	"Spriggit"
+	INPUT "${PROJECT_SOURCE_DIR}/SerializedPlugins/${PROJECT_NAME}.esp"
+	OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.esp"
+	PACKAGE Spriggit.Yaml)
 
 # ---- Automatically copy artifacts to MO2 ----
 if(DEFINED OUTPUT_FOLDER AND NOT SKIP_ARTIFACTS)
@@ -188,6 +203,7 @@ if(DEFINED OUTPUT_FOLDER AND NOT SKIP_ARTIFACTS)
         POST_BUILD
         COMMAND "${CMAKE_COMMAND}" -E copy_if_different "$<TARGET_FILE:${PROJECT_NAME}>" "${DLL_FOLDER}/$<TARGET_FILE_NAME:${PROJECT_NAME}>"
         COMMAND "${CMAKE_COMMAND}" -E copy_if_different "$<TARGET_PDB_FILE:${PROJECT_NAME}>" "${DLL_FOLDER}/$<TARGET_PDB_FILE_NAME:${PROJECT_NAME}>"
+        COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${PROJECT_BINARY_DIR}/${PROJECT_NAME}.esp" "${OUTPUT_FOLDER}/${PROJECT_NAME}.esp"
 
 		COMMAND "${CMAKE_COMMAND}"
 			-DSRC_DIR="${PROJECT_SOURCE_DIR}/Data"
@@ -210,18 +226,6 @@ if(DEFINED OUTPUT_FOLDER AND NOT SKIP_ARTIFACTS)
 		)
 	endif()
 
-    if(COPY_PEX)
-        add_custom_command(
-        TARGET "${PROJECT_NAME}"
-        POST_BUILD
-        COMMAND "${CMAKE_COMMAND}"
-            -DCOMPILED_SCRIPTS="${CMAKE_BINARY_DIR}/Scripts"
-            -DOUTPUT_FOLDER="${OUTPUT_FOLDER}"
-            -P "${PROJECT_SOURCE_DIR}/CMake/Scripts/CMake-Copy-Scripts.cmake"
-        VERBATIM
-		)
-    endif()
-
 	if(COPY_PSC)
         add_custom_command(
         TARGET "${PROJECT_NAME}"
@@ -240,42 +244,14 @@ install(
 	FILES
 		"$<TARGET_FILE:${PROJECT_NAME}>"
 		"$<TARGET_PDB_FILE:${PROJECT_NAME}>"
+		"${DATA_DIR}/${PROJECT_NAME}.ini"
 	DESTINATION "SKSE/Plugins"
 	COMPONENT components
 )
 install(
 	FILES
-		"${DATA_DIR}/PreludeToPurgatory.bsa"
-		"${DATA_DIR}/PreludeToPurgatory.esp"
+		"${PROJECT_BINARY_DIR}/${PROJECT_NAME}.esp"
+		"${PROJECT_BINARY_DIR}/${PROJECT_NAME}.bsa"
 	DESTINATION "."
-	COMPONENT components
-)
-install(
-	FILES
-		"${DATA_DIR}/SKSE/Plugins/CustomSkills/Lichdom.json"
-	DESTINATION "SKSE/Plugins/CustomSkills"
-	COMPONENT components
-)
-install(
-	FILES
-		"${DATA_DIR}/Interface/Translations/PreludeToPurgatory_ENGLISH.txt"
-	DESTINATION "Interface/Translations"
-	COMPONENT components
-)
-install(
-	FILES
-		"${DATA_DIR}/Source/Scripts/necrolichtransformscript.psc"
-		"${DATA_DIR}/Source/Scripts/necroreverteffectscript.psc"
-		"${DATA_DIR}/Source/Scripts/necrouclphylacterysoulscript.psc"
-		"${DATA_DIR}/Source/Scripts/PTP_AMEConjureDragolich.psc"
-		"${DATA_DIR}/Source/Scripts/PTP_AMEIceTrail.psc"
-		"${DATA_DIR}/Source/Scripts/PTP_AMEJoinTheMarchListener.psc"
-		"${DATA_DIR}/Source/Scripts/PTP_AMEToggleLichight.psc"
-		"${DATA_DIR}/Source/Scripts/PTP_Quest_DefaultObjectsScript.psc"
-		"${DATA_DIR}/Source/Scripts/PTP_QuestFrgmtMidnightManager.psc"
-		"${DATA_DIR}/Source/Scripts/PTP_QuestMaintenanceScript.psc"
-		"${DATA_DIR}/Source/Scripts/PTP_RefAliasMidnightMonitor.psc"
-		"${DATA_DIR}/Source/Scripts/SEA_PTPUtilityFunctions.psc"
-	DESTINATION "Source/Scripts"
 	COMPONENT components
 )
