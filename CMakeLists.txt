@@ -218,7 +218,7 @@ install(
 	FILES
 		"$<TARGET_FILE:${PROJECT_NAME}>"
 		"$<TARGET_PDB_FILE:${PROJECT_NAME}>"
-		"${DATA_DIR}/${PROJECT_NAME}.ini"
+		"${DATA_DIR}/SKSE/Plugins/${PROJECT_NAME}.ini"
 	DESTINATION "SKSE/Plugins"
 	COMPONENT components
 )
