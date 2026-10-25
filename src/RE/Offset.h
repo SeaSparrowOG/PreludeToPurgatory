@@ -1,40 +1,29 @@
 #pragma once
 
 namespace RE::Offset {
-	//Credits for the following 3:
-	//Exit-9B (Parapets)
-	//Github: https://github.com/Exit-9B/Constellations/blob/6cc31c1414e121bd30a6cb74975d35e5195b8675/src/RE/Offset.h#L76C3-L90C4
+	// Credits for the 1.7 ID: ZeCroque (banger name)
+	// https://github.com/ZeCroque
 	namespace CombatUtilities
 	{
-#ifdef GOG // seems like something above was inlined?
-		inline constexpr REL::ID GetAngleToProjectedTarget(static_cast<std::uint64_t>(47286));
+#ifdef GOG
+		inline constexpr REL::ID GetAngleToProjectedTarget(47286);
 #else
-		inline constexpr REL::ID GetAngleToProjectedTarget(static_cast<std::uint64_t>(523983));
+		inline constexpr REL::ID GetAngleToProjectedTarget(523983);
 #endif
 	}
 }
 
 namespace RE
 {
-	class TESObjectREFR;
-/*
-	enum class ACTOR_LOS_LOCATION
+	// Workaround for commonlib. Combat::GetAngleToProjectedTarget has an invalid ID for 1.7
+	static RE::NiPoint3 GetAngleToProjectedTarget(RE::NiPoint3 a_origin, 
+		RE::TESObjectREFR* a_target, 
+		float a_speed, 
+		float a_gravity, 
+		RE::ACTOR_LOS_LOCATION a_location)
 	{
-		kOrigin = 0,
-		kEye = 1,
-		kHead = 2,
-		kTorso = 3,
-		kFeet = 4
-	};
-
-	struct CombatUtilities
-	{
-		static RE::NiPoint3 GetAngleToProjectedTarget(RE::NiPoint3 a_origin, RE::TESObjectREFR* a_target, float a_speed, float a_gravity, RE::ACTOR_LOS_LOCATION a_location)
-		{
-			using func_t = decltype(&GetAngleToProjectedTarget);
-			REL::Relocation<func_t> func{ Offset::CombatUtilities::GetAngleToProjectedTarget };
-			return func(a_origin, a_target, a_speed, a_gravity, a_location);
-		}
-	};
-*/
+		using func_t = decltype(&GetAngleToProjectedTarget);
+		static REL::Relocation<func_t> func{ Offset::CombatUtilities::GetAngleToProjectedTarget };
+		return func(a_origin, a_target, a_speed, a_gravity, a_location);
+	}
 }
