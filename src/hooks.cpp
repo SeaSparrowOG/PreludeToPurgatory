@@ -21,11 +21,11 @@ namespace Hooks {
 	void HandleSpellCollisions::Install()
 	{
 		auto& trampoline = REL::GetTrampoline();
-//#ifdef GOG // seems like something above was inlined?
-//		REL::Relocation<std::uintptr_t> target{ REL::ID(44204), 0x21F };
-//#else
+#ifdef GOG // seems like something above was inlined?
+		REL::Relocation<std::uintptr_t> target{ REL::ID(44204), 0x21F };
+#else
 		REL::Relocation<std::uintptr_t> target{ REL::ID(44204), 0x239 };
-//#endif
+#endif
 		_originalCall = trampoline.write_call<5>(target.address(), &HandleCollision);
 	}
 
