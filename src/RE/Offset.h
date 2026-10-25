@@ -5,7 +5,7 @@ namespace RE::Offset {
 	// https://github.com/ZeCroque
 	namespace CombatUtilities
 	{
-#ifdef GOG
+#ifdef SKYRIM_GOG
 		inline constexpr REL::ID GetAngleToProjectedTarget(47286);
 #else
 		inline constexpr REL::ID GetAngleToProjectedTarget(523983);

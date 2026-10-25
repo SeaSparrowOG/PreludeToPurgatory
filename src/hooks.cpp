@@ -7,7 +7,9 @@
 namespace Hooks {
 	void Install()
 	{
+		_loggerInfo("  Installing Spell Collision hook..."sv);
 		HandleSpellCollisions::Install();
+		_loggerInfo("  Installing Hit Data hook..."sv);
 		CombatHit::Install();
 	}
 
@@ -15,17 +17,26 @@ namespace Hooks {
 	{
 		auto& trampoline = REL::GetTrampoline();
 		REL::Relocation<std::uintptr_t> target{ REL::ID(38627), 0x4A8 };
+		if (!REL::Pattern<"E8">().match(target.address())) {
+			_loggerError("    >Failed to validate callsite."sv);
+			REX::FAIL("Prelude to Purgatory: Failed to validate hook for Hit Data."sv);
+		}
 		_originalCall = trampoline.write_call<5>(target.address(), &Hit);
 	}
 
 	void HandleSpellCollisions::Install()
 	{
 		auto& trampoline = REL::GetTrampoline();
-#ifdef GOG // seems like something above was inlined?
+// The offset is different between 1.6 and 1.7. The function was changed somewhat, not sure what.
+#ifdef SKYRIM_GOG
 		REL::Relocation<std::uintptr_t> target{ REL::ID(44204), 0x21F };
 #else
 		REL::Relocation<std::uintptr_t> target{ REL::ID(44204), 0x239 };
 #endif
+		if (!REL::Pattern<"E8">().match(target.address())) {
+			_loggerError("    >Failed to validate callsite."sv);
+			REX::FAIL("Prelude to Purgatory: Failed to validate hook for Spell Collisions."sv);
+		}
 		_originalCall = trampoline.write_call<5>(target.address(), &HandleCollision);
 	}
 
@@ -61,7 +72,7 @@ namespace Hooks {
 			if (!canReflect) {
 				return _originalCall(a_this, a_target, arHitLocation, arHitNormal, aeCollisionLayer, auiMaterial, a7);
 			}
-
+			
 			const auto angle = RE::GetAngleToProjectedTarget(
 				a_this->GetPosition(),
 				shooter,
