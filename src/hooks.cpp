@@ -21,11 +21,11 @@ namespace Hooks {
 	void HandleSpellCollisions::Install()
 	{
 		auto& trampoline = REL::GetTrampoline();
-#ifdef GOG // seems like something above was inlined?
-		REL::Relocation<std::uintptr_t> target{ REL::ID(44204), 0x21F };
-#else
+//#ifdef GOG // seems like something above was inlined?
+//		REL::Relocation<std::uintptr_t> target{ REL::ID(44204), 0x21F };
+//#else
 		REL::Relocation<std::uintptr_t> target{ REL::ID(44204), 0x239 };
-#endif
+//#endif
 		_originalCall = trampoline.write_call<5>(target.address(), &HandleCollision);
 	}
 
@@ -49,16 +49,15 @@ namespace Hooks {
 			targetActor->IsWeaponDrawn() &&
 			baseSpell != retalliationSpell) {
 
-			auto magicka = RE::ActorValue::kMagicka;
+			const auto magicka = RE::ActorValue::kMagicka;
+			const float currMagicka = std::clamp(targetActor->GetActorValue(magicka), 0.0f, 800.0f);
+			const float chance = std::clamp(currMagicka / 1000.0f, 0.0f, 0.9f);
 
-			auto currentMagicka = targetActor->GetActorValue(magicka);
-			auto maxMagicka = targetActor->GetPermanentActorValue(magicka);
-			if (maxMagicka <= 0.0f || currentMagicka < maxMagicka / 2.0f) {
+			if (chance <= 0.5f) {
 				return _originalCall(a_this, a_target, arHitLocation, arHitNormal, aeCollisionLayer, auiMaterial, a7);
 			}
 
-			auto magickaPct = currentMagicka / maxMagicka;
-			bool canReflect = magickaPct > clib_util::RNG().generate<float>(0.0f, 0.9f);
+			const bool canReflect = chance > clib_util::RNG().generate<float>(0.0f, 0.9f);
 			if (!canReflect) {
 				return _originalCall(a_this, a_target, arHitLocation, arHitNormal, aeCollisionLayer, auiMaterial, a7);
 			}
