@@ -51,18 +51,18 @@ namespace Hooks {
 
 			const auto magicka = RE::ActorValue::kMagicka;
 			const float currMagicka = std::clamp(targetActor->GetActorValue(magicka), 0.0f, 800.0f);
-			const float chance = std::clamp(currMagicka / 1000.0f, 0.0f, 0.9f);
+			const float chance = std::clamp(currMagicka / 1000.0f, 0.0f, 0.75f);
 
 			if (chance <= 0.5f) {
 				return _originalCall(a_this, a_target, arHitLocation, arHitNormal, aeCollisionLayer, auiMaterial, a7);
 			}
 
-			const bool canReflect = chance > clib_util::RNG().generate<float>(0.0f, 0.9f);
+			const bool canReflect = chance > clib_util::RNG().generate<float>(0.0f, 1.0f);
 			if (!canReflect) {
 				return _originalCall(a_this, a_target, arHitLocation, arHitNormal, aeCollisionLayer, auiMaterial, a7);
 			}
 
-			const auto angle = RE::CombatUtilities::GetAngleToProjectedTarget(
+			const auto angle = RE::GetAngleToProjectedTarget(
 				a_this->GetPosition(),
 				shooter,
 				baseProjectile->data.speed,
